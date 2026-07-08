@@ -4,6 +4,7 @@ import {
   Mail, Lock, CheckCircle, Gem, ArrowRight, ShieldCheck, Eye, EyeOff
 } from 'lucide-react';
 import { updateProfile, getProfiles, isRealSupabaseConnected, supabase } from '../lib/supabase';
+import { Logo } from './Logo';
 
 interface CustomerLoginGateProps {
   settings: StoreSettings;
@@ -154,15 +155,7 @@ export const CustomerLoginGate: React.FC<CustomerLoginGateProps> = ({
         style={{ backgroundImage: `linear-gradient(to right, rgba(12, 10, 9, 0.96), rgba(24, 20, 18, 0.3)), url('https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=1200')` }}
       >
         <div className="flex items-center gap-3">
-          <img 
-            src={settings.logo_url} 
-            alt="Store Logo" 
-            className="h-10 w-10 rounded-full object-cover border border-[#D4AF37]/80 p-0.5 bg-stone-900"
-            referrerPolicy="no-referrer"
-          />
-          <span className="font-serif text-sm tracking-widest font-bold text-[#D4AF37] uppercase">
-            {settings.shop_name}
-          </span>
+          <Logo variant="compact" />
         </div>
 
         <div className="space-y-4 max-w-lg">
@@ -193,15 +186,7 @@ export const CustomerLoginGate: React.FC<CustomerLoginGateProps> = ({
           {/* Logo representation on mobile */}
           <div className="flex lg:hidden items-center justify-between border-b border-stone-200 pb-4 mb-2">
             <div className="flex items-center gap-2.5">
-              <img 
-                src={settings.logo_url} 
-                alt="Logo" 
-                className="h-9 w-9 rounded-full object-cover border border-[#D4AF37]"
-                referrerPolicy="no-referrer"
-              />
-              <h2 className="font-serif font-bold text-stone-900 text-sm leading-tight tracking-tight uppercase">
-                {settings.shop_name}
-              </h2>
+              <Logo variant="compact" className="scale-75 origin-left" />
             </div>
             <span className="text-[8px] font-mono bg-stone-150 border border-stone-250 text-stone-500 px-2 py-0.5 rounded-none uppercase">
               Secure Access

@@ -21,6 +21,7 @@ import { PasswordGate } from './components/PasswordGate';
 import { AdminPanel } from './components/AdminPanel';
 import { CustomerLoginGate } from './components/CustomerLoginGate';
 import { ToastMessage, ToastContainer } from './components/Toast';
+import { Logo } from './components/Logo';
 import { CurrencyCode } from './lib/currency';
 import { 
   Gem, User, ShieldAlert, Award, Search, Calendar, ChevronRight, Crown, 
@@ -506,22 +507,8 @@ export default function App() {
       <div className="flex min-h-screen items-center justify-center bg-[#0B0B0B] text-amber-200">
         <div className="text-center space-y-6 max-w-lg px-4">
           <div className="relative flex items-center justify-center mx-auto mb-8">
-            {/* Concentric glowing luxury rings */}
-            <div className="absolute h-24 w-24 rounded-full border border-amber-500/10 animate-ping duration-[3000ms]" />
-            <div className="absolute h-20 w-20 rounded-full border border-amber-500/20 animate-pulse duration-[2000ms]" />
-            {/* Shimmering brand mark centerpiece */}
-            <div className="relative h-16 w-16 flex items-center justify-center rounded-full bg-[#121212] border border-amber-500/40 shadow-[0_0_20px_rgba(245,158,11,0.1)]">
-              <svg className="h-8 w-8 text-amber-200/90 animate-pulse duration-[2500ms]" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="1.2">
-                <polygon points="12,2 22,8.5 12,22 2,8.5" />
-                <polyline points="2,8.5 12,12 22,8.5" />
-                <line x1="12" y1="2" x2="12" y2="12" />
-                <line x1="12" y1="12" x2="12" y2="22" />
-              </svg>
-            </div>
+            <Logo variant="default" className="scale-90 transform" />
           </div>
-          <h1 className="font-serif text-xl sm:text-2xl md:text-3xl font-extrabold uppercase tracking-widest bg-gradient-to-r from-amber-200 via-yellow-400 to-amber-500 bg-clip-text text-transparent select-none leading-normal">
-            SRI VENKATESWARA JEWELLERS
-          </h1>
           {/* Branded progress bar */}
           <div className="w-48 mx-auto mt-4 h-[2px] rounded-full bg-stone-800 overflow-hidden">
             <div
@@ -730,12 +717,7 @@ export default function App() {
             className="group relative focus:outline-hidden cursor-pointer transition-transform duration-300 hover:scale-110 active:scale-95"
             title="Click to view logo clearly"
           >
-            <img 
-              src={settings.logo_url} 
-              alt={`${settings.shop_name} Logo`} 
-              className="h-11 w-11 rounded-full object-cover border border-[#D4AF37]/70 p-0.5 shadow-md bg-stone-900 group-hover:border-white transition-colors"
-              referrerPolicy="no-referrer"
-            />
+            <Logo variant="compact" className="group-hover:opacity-90 transition-opacity" />
           </button>
         </div>
 
