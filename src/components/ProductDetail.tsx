@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { Product, StoreSettings, WhatsAppNumber, Review } from '../types';
+import { Product, StoreSettings, WhatsAppNumber, Review, Profile } from '../types';
 import { getRateForPurity, calculateJewelryPrice, ProductCard, getCanceledRateForPurity, getExclusiveOfferRateForPurity } from './ProductCard';
 import { X, MessageSquare, Star, CheckCircle, AlertTriangle, ShieldCheck, Calendar, ArrowLeft, ArrowRight, Send, Mail, Bell, Globe, Heart } from 'lucide-react';
 import { addReview, addStockNotification } from '../lib/supabase';
@@ -19,6 +19,8 @@ interface ProductDetailProps {
   wishlist?: string[];
   onToggleFavorite?: (id: string) => void;
   onBack?: () => void;
+  activeProfile: Profile | null;
+  onRequireAuth: () => void;
 }
 
 export const ProductDetail: React.FC<ProductDetailProps> = ({
@@ -35,6 +37,8 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
   wishlist = [],
   onToggleFavorite,
   onBack,
+  activeProfile,
+  onRequireAuth,
 }) => {
   const isFavorite = wishlist.includes(product.id);
   const [activeImageIndex, setActiveImageIndex] = useState(0);
@@ -173,6 +177,10 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
   };
 
   const triggerWhatsAppBroadcast = (phone: string, refName: string) => {
+    if (!activeProfile) {
+      onRequireAuth();
+      return;
+    }
     const today = new Date().toLocaleDateString('en-IN', {
       day: 'numeric',
       month: 'short',
@@ -200,6 +208,10 @@ Please let me know if this article is currently available for a customized virtu
 
   // Broadcast to all configured numbers with a single click
   const handleSequentialBroadcast = () => {
+    if (!activeProfile) {
+      onRequireAuth();
+      return;
+    }
     if (whatsAppNumbers.length === 0) {
       alert('No business WhatsApp numbers are currently configured in the settings! Please add numbers in the Admin Dashboard.');
       return;

@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { Profile, StoreSettings } from '../types';
 import { 
-  Mail, Lock, CheckCircle, Gem, ArrowRight, ShieldCheck, Eye, EyeOff
+  Mail, Lock, CheckCircle, Gem, ArrowRight, ShieldCheck, Eye, EyeOff, X
 } from 'lucide-react';
 import { updateProfile, getProfiles, isRealSupabaseConnected, supabase } from '../lib/supabase';
 import { Logo } from './Logo';
@@ -9,11 +9,13 @@ import { Logo } from './Logo';
 interface CustomerLoginGateProps {
   settings: StoreSettings;
   onLoginSuccess: (profile: Profile) => void;
+  onClose?: () => void;
 }
 
 export const CustomerLoginGate: React.FC<CustomerLoginGateProps> = ({
   settings,
-  onLoginSuccess
+  onLoginSuccess,
+  onClose
 }) => {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
@@ -148,6 +150,15 @@ export const CustomerLoginGate: React.FC<CustomerLoginGateProps> = ({
 
   return (
     <div className="fixed inset-0 z-50 overflow-y-auto lg:overflow-hidden flex flex-col lg:flex-row bg-stone-50 lg:bg-stone-950 font-sans text-[#1A1A1A]">
+      {onClose && (
+        <button 
+          onClick={onClose}
+          className="absolute top-4 right-4 z-[60] p-2 bg-white/10 hover:bg-white/20 rounded-full text-stone-400 hover:text-stone-100 transition-colors backdrop-blur-sm lg:text-stone-300 lg:hover:text-white"
+          title="Close login"
+        >
+          <X size={24} />
+        </button>
+      )}
       
       {/* 1. LEFT SPLASH SCREEN PANEL */}
       <div 

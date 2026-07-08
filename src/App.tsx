@@ -53,6 +53,7 @@ export default function App() {
     return null;
   });
   const [isLoading, setIsLoading] = useState(true);
+  const [showAuthModal, setShowAuthModal] = useState(false);
 
   // Filter States
   const [searchQuery, setSearchQuery] = useState('');
@@ -192,6 +193,10 @@ export default function App() {
   }, [activeProfile?.id, activeProfile?.email]);
 
   const toggleWishlist = async (productId: string) => {
+    if (!activeProfile) {
+      setShowAuthModal(true);
+      return;
+    }
     const product = products.find(p => p.id === productId);
     const productName = product ? product.name : 'Item';
     const productImage = product?.image_urls?.[0];
@@ -531,21 +536,6 @@ export default function App() {
           </p>
         </div>
       </div>
-    );
-  }
-
-  // Auto-login Gate validation path
-  if (!activeProfile) {
-    return (
-      <CustomerLoginGate
-        settings={settings}
-        onLoginSuccess={(profile) => {
-          setActiveProfile(profile);
-          localStorage.setItem('svj_active_customer_email', profile.email);
-          localStorage.setItem('svj_active_customer_profile', JSON.stringify(profile));
-          loadDatabaseState();
-        }}
-      />
     );
   }
 
@@ -1275,6 +1265,8 @@ export default function App() {
           }}
           wishlist={wishlist}
           onToggleFavorite={toggleWishlist}
+          activeProfile={activeProfile}
+          onRequireAuth={() => setShowAuthModal(true)}
         />
       )}
 
@@ -1498,6 +1490,20 @@ export default function App() {
           </div>
         )}
       </AnimatePresence>
+
+      {showAuthModal && (
+        <CustomerLoginGate
+          settings={settings}
+          onLoginSuccess={(profile) => {
+            setActiveProfile(profile);
+            localStorage.setItem('svj_active_customer_email', profile.email);
+            localStorage.setItem('svj_active_customer_profile', JSON.stringify(profile));
+            loadDatabaseState();
+            setShowAuthModal(false);
+          }}
+          onClose={() => setShowAuthModal(false)}
+        />
+      )}
 
       <ToastContainer toasts={toasts} onRemove={removeToast} primaryColor={primaryColor} />
     </div>
