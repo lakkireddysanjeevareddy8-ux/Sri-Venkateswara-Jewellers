@@ -22,10 +22,11 @@ import { AdminPanel } from './components/AdminPanel';
 import { CustomerLoginGate } from './components/CustomerLoginGate';
 import { ToastMessage, ToastContainer } from './components/Toast';
 import { Logo } from './components/Logo';
+import { WishlistDrawer } from './components/WishlistDrawer';
 import { CurrencyCode } from './lib/currency';
 import { 
   Gem, User, ShieldAlert, Award, Search, Calendar, ChevronRight, Crown, 
-  MessageSquare, Star, Sparkles, Filter, X, Info, Settings, MapPin 
+  MessageSquare, Star, Sparkles, Filter, X, Info, Settings, MapPin, Heart
 } from 'lucide-react';
 
 export default function App() {
@@ -54,6 +55,7 @@ export default function App() {
   });
   const [isLoading, setIsLoading] = useState(true);
   const [showAuthModal, setShowAuthModal] = useState(false);
+  const [isWishlistOpen, setIsWishlistOpen] = useState(false);
 
   // Filter States
   const [searchQuery, setSearchQuery] = useState('');
@@ -743,6 +745,25 @@ export default function App() {
           )}
 
           <button
+            onClick={() => {
+              if (!activeProfile) {
+                setShowAuthModal(true);
+              } else {
+                setIsWishlistOpen(true);
+              }
+            }}
+            className="relative border border-[#D4AF37]/40 bg-[#1A1A1A]/40 text-stone-250 hover:bg-[#D4AF37]/15 p-2 rounded-full transition-all flex items-center justify-center cursor-pointer shadow-sm hover:scale-105 duration-200"
+            title="My Saved Wishlist"
+          >
+            <Heart className="h-4.5 w-4.5 text-[#D4AF37]" />
+            {wishlist.length > 0 && (
+              <span className="absolute -top-1 -right-1 bg-rose-600 text-white text-[8px] font-mono font-bold h-4 w-4 rounded-full flex items-center justify-center border border-stone-900 animate-pulse">
+                {wishlist.length}
+              </span>
+            )}
+          </button>
+
+          <button
             onClick={() => setIsProfileOpen(true)}
             className="border border-[#D4AF37]/40 bg-[#1A1A1A]/40 text-stone-250 hover:bg-[#D4AF37]/15 p-2 rounded-full transition-all flex items-center justify-center cursor-pointer shadow-sm hover:scale-105 duration-200"
             title={activeProfile ? `Client Account: ${activeProfile.username}` : "Guest Sign In / Client Account"}
@@ -1307,10 +1328,6 @@ export default function App() {
             }
             loadDatabaseState();
           }}
-          products={products}
-          wishlist={wishlist}
-          onToggleFavorite={toggleWishlist}
-          onSelectProduct={(prod) => handleOpenProduct(prod)}
           selectedCurrency={selectedCurrency}
           onCurrencyChange={(curr) => {
             setSelectedCurrency(curr);
@@ -1502,6 +1519,18 @@ export default function App() {
             setShowAuthModal(false);
           }}
           onClose={() => setShowAuthModal(false)}
+        />
+      )}
+
+      {isWishlistOpen && (
+        <WishlistDrawer
+          settings={settings}
+          wishlist={wishlist}
+          products={products}
+          onClose={() => setIsWishlistOpen(false)}
+          onToggleFavorite={toggleWishlist}
+          onSelectProduct={handleSelectProduct}
+          selectedCurrency={selectedCurrency}
         />
       )}
 
