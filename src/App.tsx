@@ -1556,9 +1556,9 @@ export default function App() {
           )}
 
           {/* Phone Call Button */}
-          {settings.shop_phone && (
+          {whatsAppNumbers.length > 0 && (
             <motion.a
-              href={`tel:${settings.shop_phone}`}
+              href={`tel:${whatsAppNumbers[0].phone_number.replace(/[^0-9+]/g, '')}`}
               className="group flex items-center justify-center w-12 h-12 rounded-full border border-stone-200 transition-all duration-300 cursor-pointer hover:bg-stone-50"
               initial={{ opacity: 0, scale: 0.8 }}
               animate={{ opacity: 1, scale: 1 }}
