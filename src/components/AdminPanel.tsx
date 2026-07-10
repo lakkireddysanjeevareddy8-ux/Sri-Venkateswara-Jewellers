@@ -1732,9 +1732,15 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                                     <input
                                         type="text"
                                         value={shopPhone}
-                                        onChange={(e) => setShopPhone(e.target.value)}
+                                        onChange={(e) => {
+                                            let val = e.target.value;
+                                            if (!val.startsWith('+91 ')) {
+                                                val = '+91 ' + val.replace(/^\+?9?1?\s*/, '').trimStart();
+                                            }
+                                            setShopPhone(val);
+                                        }}
                                         className="mt-1 w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2.5 text-xs focus:border-[#936C31] focus:outline-hidden font-mono"
-                                        placeholder="e.g. +919876543210"
+                                        placeholder="+91 98765 43210"
                                     />
                                     <span className="text-[9px] text-stone-400 mt-1 block">
                                         This number powers the floating phone call button on the storefront. Include country code (e.g. +91...).
@@ -2219,8 +2225,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                                         <input
                                             type="text"
                                             value={newWaNumber}
-                                            onChange={(e) => setNewWaNumber(e.target.value)}
-                                            placeholder="e.g. +919876543210"
+                                            onChange={(e) => {
+                                                let val = e.target.value;
+                                                if (!val.startsWith('+91 ')) {
+                                                    val = '+91 ' + val.replace(/^\+?9?1?\s*/, '').trimStart();
+                                                }
+                                                setNewWaNumber(val);
+                                            }}
+                                            placeholder="+91 98765 43210"
                                             className="mt-1 w-full rounded-xl border border-stone-300 bg-white px-3 py-2 text-xs focus:border-stone-500 focus:outline-hidden font-mono"
                                             required
                                         />
