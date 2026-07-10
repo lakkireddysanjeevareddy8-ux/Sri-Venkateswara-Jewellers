@@ -13,18 +13,26 @@ interface ProfileDrawerProps {
   onClose: () => void;
   onOpenAdmin: () => void;
   onProfileUpdated?: (profile?: Profile) => void;
+  products?: Product[];
+  wishlist?: string[];
+  onToggleFavorite?: (id: string) => void;
+  onSelectProduct?: (product: Product) => void;
   selectedCurrency: CurrencyCode;
   onCurrencyChange: (currency: CurrencyCode) => void;
 }
 
-export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ 
-  settings, 
+export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
+  settings,
   activeProfile,
   onLogin,
   onLogout,
   onClose,
   onOpenAdmin,
   onProfileUpdated,
+  products = [],
+  wishlist = [],
+  onToggleFavorite = () => { },
+  onSelectProduct = () => { },
   selectedCurrency,
   onCurrencyChange
 }) => {
@@ -33,19 +41,20 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
     id: '',
     username: '',
     email: '',
-    phone_number: '',
+    phone_number: '+91 ',
     shipping_address: ''
   });
-  
+
   const [isSaving, setIsSaving] = useState(false);
   const [saveSuccess, setSaveSuccess] = useState(false);
+  const [activeTab, setActiveTab] = useState<'profile' | 'wishlist'>('profile');
 
   // Standard Login / Signup Form States
   const [loginEmail, setLoginEmail] = useState('');
   const [loginPassword, setLoginPassword] = useState('');
   const [loginTab, setLoginTab] = useState<'signin' | 'signup'>('signin');
   const [regName, setRegName] = useState('');
-  const [regPhone, setRegPhone] = useState('');
+  const [regPhone, setRegPhone] = useState('+91 ');
   const [regAddress, setRegAddress] = useState('');
   const [isLoggingIn, setIsLoggingIn] = useState(false);
   const [loginError, setLoginError] = useState<string | null>(null);
@@ -58,21 +67,11 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
   }, [activeProfile]);
 
   // Helper: Retrieve passwords map
-  const djb2Hash = (str: string): string => {
-    let hash = 5381;
-    for (let i = 0; i < str.length; i++) {
-      hash = ((hash * 33) & 0xffffffff) ^ str.charCodeAt(i);
-    }
-    return (hash >>> 0).toString(16);
-  };
-
   const getPasswordsMap = (): Record<string, string> => {
     const defaultMap: Record<string, string> = {
-      'lakkireddysanjeevareddy8@gmail.com': '8159cfaa',
-      'sanjeev.lakkireddy@gmail.com': 'eb039695',
-      'guest.jewellery@gmail.com': 'f563505',
-      'svj.rajampet@gmail.com': '46385e48',
-      'kothurubharath@gmail.com': '46385e48'
+      'lakkireddysanjeevareddy8@gmail.com': 'password123',
+      'sanjeev.lakkireddy@gmail.com': 'sanjeev123',
+      'guest.jewellery@gmail.com': 'guest123'
     };
     try {
       const raw = localStorage.getItem('svj_passwords');
@@ -88,7 +87,7 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
   // Helper: Save password
   const savePassword = (userEmail: string, pass: string) => {
     const map = getPasswordsMap();
-    map[userEmail.toLowerCase().trim()] = djb2Hash(pass);
+    map[userEmail.toLowerCase().trim()] = pass;
     localStorage.setItem('svj_passwords', JSON.stringify(map));
   };
 
@@ -115,8 +114,8 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
           setIsLoggingIn(false);
           return;
         }
-        const registeredHash = passwords[emailLower] || '8159cfaa';
-        if (registeredHash !== djb2Hash(loginPassword)) {
+        const registeredPassword = passwords[emailLower] || 'password123';
+        if (registeredPassword !== loginPassword) {
           setLoginError('Incorrect password. Please verify and try again.');
           setIsLoggingIn(false);
           return;
@@ -167,7 +166,7 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
   const handleSave = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!activeProfile) return;
-    
+
     setIsSaving(true);
     try {
       await updateProfile(profile);
@@ -185,6 +184,7 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
 
   const primaryColor = settings.dynamic_theme.primary;
   const secondaryColor = settings.dynamic_theme.secondary;
+  const wishlistProducts = products.filter(p => wishlist.includes(p.id));
 
   return (
     <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-stone-50 shadow-2xl border-l border-stone-200 flex flex-col justify-between overflow-hidden">
@@ -214,7 +214,43 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
         </button>
       </div>
 
-      {/* Drawer Body - Google Login Form or Profile Form */}
+      {/* Tab Navigation (Only visible when activeProfile is logged in) */}
+      {activeProfile && (
+        <div className="flex border-b border-stone-200 bg-white shrink-0">
+          <button
+            type="button"
+            onClick={() => setActiveTab('profile')}
+            className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider font-mono border-b-2 transition-all flex items-center justify-center gap-2 cursor-pointer ${activeTab === 'profile'
+                ? 'border-[#936C31] text-[#936C31]'
+                : 'border-transparent text-stone-450 hover:text-stone-700'
+              }`}
+            style={{
+              borderColor: activeTab === 'profile' ? primaryColor : 'transparent',
+              color: activeTab === 'profile' ? primaryColor : undefined
+            }}
+          >
+            <User className="h-4 w-4" />
+            My Profile
+          </button>
+          <button
+            type="button"
+            onClick={() => setActiveTab('wishlist')}
+            className={`flex-1 py-3 text-xs font-bold uppercase tracking-wider font-mono border-b-2 transition-all flex items-center justify-center gap-2 cursor-pointer ${activeTab === 'wishlist'
+                ? 'border-[#936C31] text-[#936C31]'
+                : 'border-transparent text-stone-450 hover:text-stone-700'
+              }`}
+            style={{
+              borderColor: activeTab === 'wishlist' ? primaryColor : 'transparent',
+              color: activeTab === 'wishlist' ? primaryColor : undefined
+            }}
+          >
+            <Heart className={`h-4 w-4 ${wishlist.length > 0 ? 'fill-rose-500 text-rose-500' : ''}`} />
+            My Wishlist ({wishlist.length})
+          </button>
+        </div>
+      )}
+
+      {/* Drawer Body - Tabs Content or Google Login Form */}
       {!activeProfile ? (
         /* STANDARD SIGN-IN / SIGN-UP COMPONENT */
         <div className="flex-1 p-6 space-y-6 overflow-y-auto flex flex-col justify-start">
@@ -235,9 +271,8 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                 setLoginTab('signin');
                 setLoginError(null);
               }}
-              className={`flex-1 py-1.5 text-[10px] font-bold uppercase tracking-wider font-mono transition-all rounded-lg flex items-center justify-center gap-2 cursor-pointer ${
-                loginTab === 'signin' ? 'bg-white text-stone-900 shadow-xs' : 'text-stone-500 hover:text-stone-850'
-              }`}
+              className={`flex-1 py-1.5 text-[10px] font-bold uppercase tracking-wider font-mono transition-all rounded-lg flex items-center justify-center gap-2 cursor-pointer ${loginTab === 'signin' ? 'bg-white text-stone-900 shadow-xs' : 'text-stone-500 hover:text-stone-850'
+                }`}
             >
               Sign In
             </button>
@@ -247,9 +282,8 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                 setLoginTab('signup');
                 setLoginError(null);
               }}
-              className={`flex-1 py-1.5 text-[10px] font-bold uppercase tracking-wider font-mono transition-all rounded-lg flex items-center justify-center gap-2 cursor-pointer ${
-                loginTab === 'signup' ? 'bg-white text-stone-900 shadow-xs' : 'text-stone-500 hover:text-stone-850'
-              }`}
+              className={`flex-1 py-1.5 text-[10px] font-bold uppercase tracking-wider font-mono transition-all rounded-lg flex items-center justify-center gap-2 cursor-pointer ${loginTab === 'signup' ? 'bg-white text-stone-900 shadow-xs' : 'text-stone-500 hover:text-stone-850'
+                }`}
             >
               Register
             </button>
@@ -335,9 +369,15 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                         type="text"
                         required
                         value={regPhone}
-                        onChange={(e) => setRegPhone(e.target.value)}
+                        onChange={(e) => {
+                          let val = e.target.value;
+                          if (!val.startsWith('+91 ')) {
+                            val = '+91 ' + val.replace(/^\+?9?1?\s*/, '').trimStart();
+                          }
+                          setRegPhone(val);
+                        }}
                         className="w-full rounded-xl border border-stone-200 bg-stone-50 pl-9 pr-3 py-2 text-xs font-mono focus:border-stone-500 focus:outline-hidden text-stone-850"
-                        placeholder="e.g. +91 99008 87766"
+                        placeholder="+91 99008 87766"
                       />
                     </div>
                   </div>
@@ -371,7 +411,7 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
             </button>
           </form>
         </div>
-      ) : (
+      ) : activeTab === 'profile' ? (
         /* LOGGED IN PROFILE FORM VIEW */
         <form onSubmit={handleSave} className="flex-1 p-6 space-y-6 overflow-y-auto">
           {saveSuccess && (
@@ -413,14 +453,10 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                   type="email"
                   value={profile.email}
                   disabled
-                  className="w-full rounded-lg border border-stone-200 bg-stone-50 pl-9 pr-3 py-2.5 text-xs font-mono text-stone-500 cursor-not-allowed focus:outline-hidden"
-                  placeholder="Verify registered email"
-                  required
+                  className="w-full rounded-lg border border-stone-200 bg-stone-150 pl-9 pr-3 py-2.5 text-xs text-stone-500 font-mono cursor-not-allowed focus:outline-hidden"
                 />
               </div>
-              <p className="text-[10px] text-stone-400 font-mono tracking-wide mt-1.5 uppercase">
-                Registered Customer Email
-              </p>
+              <p className="text-[10px] text-stone-400 font-mono mt-1">Registered Customer Email</p>
             </div>
 
             <div>
@@ -434,9 +470,15 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
                 <input
                   type="text"
                   value={profile.phone_number}
-                  onChange={(e) => setProfile({ ...profile, phone_number: e.target.value })}
+                  onChange={(e) => {
+                    let val = e.target.value;
+                    if (!val.startsWith('+91 ')) {
+                      val = '+91 ' + val.replace(/^\+?9?1?\s*/, '').trimStart();
+                    }
+                    setProfile({ ...profile, phone_number: val });
+                  }}
                   className="w-full rounded-lg border border-stone-300 bg-white pl-9 pr-3 py-2.5 text-xs focus:border-stone-500 focus:outline-hidden"
-                  placeholder="+91 99008 87766"
+                  placeholder="+91 "
                   required
                 />
               </div>
@@ -500,11 +542,137 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
               Sign Out from Showroom
             </button>
           </div>
+
+          {/* Administration Access */}
+          <div className="pt-6 border-t border-stone-200 space-y-3">
+            <div className="flex items-center gap-2">
+              <span className="p-1 rounded bg-stone-200 text-stone-700">
+                <ShieldAlert className="h-4 w-4" />
+              </span>
+              <span className="text-[10px] font-bold text-stone-500 uppercase font-mono tracking-wider">
+                Administration Portal
+              </span>
+            </div>
+            <p className="text-[11px] text-stone-500 leading-relaxed font-serif italic">
+              Authorized personnel only. Access daily rate overrides, catalogue items manager, and visual style variables here.
+            </p>
+            <button
+              type="button"
+              onClick={() => {
+                onClose();
+                onOpenAdmin();
+              }}
+              className="w-full border border-[#1A1A1A] bg-[#1A1A1A] hover:bg-[#936C31] hover:border-[#936C31] text-white py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all rounded-none cursor-pointer flex items-center justify-center gap-2"
+            >
+              Open Admin Dashboard
+            </button>
+          </div>
         </form>
+      ) : (
+        /* SAVED FAVORITES WISHLIST TAB */
+        <div className="flex-1 p-6 space-y-4 overflow-y-auto flex flex-col justify-between">
+          <div className="space-y-4">
+            <div className="flex items-center justify-between border-b border-stone-200 pb-2">
+              <span className="text-[10px] font-mono uppercase tracking-wider text-stone-400 font-bold">
+                {wishlistProducts.length} Saved {wishlistProducts.length === 1 ? 'Article' : 'Articles'}
+              </span>
+            </div>
+
+            {wishlistProducts.length === 0 ? (
+              <div className="py-16 flex flex-col items-center justify-center text-center space-y-4">
+                <div className="rounded-full bg-stone-100 p-4 text-stone-450 border border-stone-200">
+                  <Heart className="h-7 w-7 text-stone-300" />
+                </div>
+                <div>
+                  <p className="font-serif text-sm italic text-stone-600">Your wishlist is currently empty.</p>
+                  <p className="text-[11px] text-stone-450 mt-1.5 max-w-xs leading-relaxed">
+                    Explore our curated catalog of precious gold and silver masterpieces, and tap the heart icon on any product card to save your favorite articles.
+                  </p>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-3">
+                {wishlistProducts.map((prod) => {
+                  let currentRate = getRateForPurity(prod.purity_type, settings);
+                  if (prod.offer_exclusive_rate && prod.offer_exclusive_rate > 0) {
+                    currentRate = prod.offer_exclusive_rate;
+                  } else if (settings.flat_offer_active) {
+                    currentRate = getExclusiveOfferRateForPurity(prod.purity_type, settings);
+                  }
+
+                  // Stone/Metal custom pricing logic
+                  const metalWeight = (prod.has_stone && prod.metal_weight_grams !== undefined && prod.metal_weight_grams > 0)
+                    ? prod.metal_weight_grams
+                    : prod.weight_grams;
+                  const stonePrice = (prod.has_stone && prod.stone_price !== undefined)
+                    ? prod.stone_price
+                    : 0;
+
+                  const onlyMetalPriceBase = metalWeight * currentRate;
+                  const metalPriceWithMaking = onlyMetalPriceBase * (1 + prod.making_charge_percent / 100);
+
+                  const basePrice = prod.has_stone
+                    ? (metalPriceWithMaking + stonePrice)
+                    : calculateJewelryPrice(prod.weight_grams, currentRate, prod.making_charge_percent);
+
+                  const finalPrice = basePrice * 1.03; // Including 3% GST (1.5% CGST + 1.5% SGST) on the fully combined price
+                  const formattedPrice = convertAndFormatPrice(finalPrice, selectedCurrency);
+
+                  return (
+                    <div
+                      key={prod.id}
+                      className="flex items-center gap-3 bg-white border border-stone-200 p-2.5 rounded-xl hover:border-[#936C31]/50 hover:shadow-xs transition-all cursor-pointer group/item"
+                      onClick={() => {
+                        onSelectProduct(prod);
+                        onClose(); // Close drawer so details open
+                      }}
+                    >
+                      {/* Small image */}
+                      <div className="h-14 w-14 rounded-lg overflow-hidden bg-stone-50 shrink-0 border border-stone-150">
+                        <img
+                          src={prod.image_urls[0] || 'https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?q=80&w=200'}
+                          alt={prod.name}
+                          className="h-full w-full object-cover"
+                          referrerPolicy="no-referrer"
+                        />
+                      </div>
+
+                      {/* Metadata & Valuation */}
+                      <div className="flex-1 min-w-0">
+                        <h4 className="font-serif text-sm font-bold text-stone-900 truncate group-hover/item:text-[#936C31] transition-colors leading-snug">
+                          {prod.name}
+                        </h4>
+                        <p className="text-[9px] uppercase font-mono tracking-wider text-stone-400 truncate mt-0.5">
+                          {prod.purity_type} • {prod.weight_grams.toFixed(1)}g
+                        </p>
+                        <strong className="text-xs font-serif text-[#1A1A1A] block mt-0.5">
+                          {formattedPrice}
+                        </strong>
+                      </div>
+
+                      {/* Remove button */}
+                      <button
+                        type="button"
+                        onClick={(e) => {
+                          e.stopPropagation();
+                          onToggleFavorite(prod.id);
+                        }}
+                        className="p-2 text-stone-400 hover:text-rose-600 transition-colors cursor-pointer rounded-full hover:bg-rose-50"
+                        title="Remove from Wishlist"
+                      >
+                        <Trash2 className="h-4 w-4" />
+                      </button>
+                    </div>
+                  );
+                })}
+              </div>
+            )}
+          </div>
+        </div>
       )}
 
       {/* Drawer Footer */}
-      {activeProfile && (
+      {activeProfile && activeTab === 'profile' && (
         <div className="p-6 border-t border-stone-200 bg-white shrink-0">
           <button
             type="submit"
