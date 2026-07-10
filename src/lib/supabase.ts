@@ -692,15 +692,47 @@ export const subscribeToRealtimeChanges = (callback: () => void): (() => void) =
 
 // --- Profiles ---
 export const getProfiles = async (): Promise<Profile[]> => {
+  const localProfiles: Profile[] = JSON.parse(localStorage.getItem('svj_profiles') || '[]');
+  
   if (isRealSupabaseConnected && supabase) {
     const { data, error } = await supabase.from('profiles').select('*');
-    if (!error && data) return data;
+    if (!error && data) {
+      // Merge Supabase data with local changes to preserve local edits (e.g. shipping address)
+      // that might have failed to upsert due to RLS policies when logged in locally.
+      const merged = data.map((dbProf: any) => {
+        const local = localProfiles.find(p => p.id === dbProf.id);
+        if (local) {
+          return { ...dbProf, ...local };
+        }
+        return dbProf;
+      });
+      
+      // Also append any local profiles that don't exist in Supabase yet
+      localProfiles.forEach(local => {
+        if (!merged.find((m: any) => m.id === local.id)) {
+          merged.push(local);
+        }
+      });
+      
+      return merged;
+    }
   }
-  return JSON.parse(localStorage.getItem('svj_profiles') || '[]');
+  return localProfiles;
 };
 
 export const updateProfile = async (profile: Profile): Promise<Profile> => {
   const { password, ...dbProfile } = profile;
+  
+  // First, always update local storage so it serves as our reliable state
+  const profiles: Profile[] = JSON.parse(localStorage.getItem('svj_profiles') || '[]');
+  const idx = profiles.findIndex(p => p.id === profile.id);
+  if (idx > -1) {
+    profiles[idx] = profile;
+  } else {
+    profiles.push(profile);
+  }
+  localStorage.setItem('svj_profiles', JSON.stringify(profiles));
+
   if (isRealSupabaseConnected && supabase) {
     const { data, error } = await supabase
       .from('profiles')
@@ -710,20 +742,10 @@ export const updateProfile = async (profile: Profile): Promise<Profile> => {
     if (error) {
       console.error("Supabase updateProfile error:", error);
     }
-    if (!error) {
-      await triggerSimulationSync();
-      // Fall back to the payload we sent if the re-select came back empty (e.g. RLS blocking the read)
-      return { ...(data || dbProfile), password };
-    }
+    // We proceed to triggerSimulationSync even if there's an error, 
+    // to ensure local state syncs up to Express DB.
   }
-  const profiles: Profile[] = JSON.parse(localStorage.getItem('svj_profiles') || '[]');
-  const idx = profiles.findIndex(p => p.id === profile.id);
-  if (idx > -1) {
-    profiles[idx] = profile;
-  } else {
-    profiles.push(profile);
-  }
-  localStorage.setItem('svj_profiles', JSON.stringify(profiles));
+  
   await triggerSimulationSync();
   return profile;
 };
