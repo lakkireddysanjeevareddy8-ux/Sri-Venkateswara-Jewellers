@@ -67,6 +67,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     const [logoUrl, setLogoUrl] = useState(settings.logo_url);
     const [gstin, setGstin] = useState(settings.gstin || '');
     const [address, setAddress] = useState(settings.address || '');
+    const [shopPhone, setShopPhone] = useState(settings.shop_phone || '');
     const [gold22k, setGold22k] = useState(settings.gold_22k_rate);
     const [gold24k, setGold24k] = useState(settings.gold_24k_rate);
     const [silverNormal, setSilverNormal] = useState(settings.silver_normal_rate);
@@ -185,6 +186,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             setLogoUrl(settings.logo_url);
             setGstin(settings.gstin || '');
             setAddress(settings.address || '');
+            setShopPhone(settings.shop_phone || '');
             setGold22k(settings.gold_22k_rate);
             setGold24k(settings.gold_24k_rate);
             setSilverNormal(settings.silver_normal_rate);
@@ -536,6 +538,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                 logo_url: logoUrl,
                 gstin: gstin,
                 address: address,
+                shop_phone: shopPhone,
                 shop_name_font: shopNameFont,
                 shop_name_italic: shopNameItalic,
                 shop_name_bold: shopNameBold,
@@ -1718,6 +1721,23 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                                     />
                                     <span className="text-[9px] text-stone-400 mt-1 block">
                                         Displays legally in the storefront footer so customers can locate your showroom.
+                                    </span>
+                                </div>
+
+                                {/* Shop Phone Number Field */}
+                                <div className="pt-2">
+                                    <label className="block text-xs font-bold text-stone-600 uppercase font-mono">
+                                        Shop Phone Number (for Call Button)
+                                    </label>
+                                    <input
+                                        type="text"
+                                        value={shopPhone}
+                                        onChange={(e) => setShopPhone(e.target.value)}
+                                        className="mt-1 w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2.5 text-xs focus:border-[#936C31] focus:outline-hidden font-mono"
+                                        placeholder="e.g. +919876543210"
+                                    />
+                                    <span className="text-[9px] text-stone-400 mt-1 block">
+                                        This number powers the floating phone call button on the storefront. Include country code (e.g. +91...).
                                     </span>
                                 </div>
 

@@ -33,6 +33,7 @@ export interface StoreSettings {
   admin_password?: string;
   gstin?: string;
   address?: string;
+  shop_phone?: string;
   ad_active?: boolean;
   ad_media_type?: 'image' | 'video';
   ad_media_url?: string;

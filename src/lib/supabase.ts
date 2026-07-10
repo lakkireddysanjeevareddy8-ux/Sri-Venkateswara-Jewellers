@@ -47,6 +47,7 @@ const DEFAULT_SETTINGS: StoreSettings = {
   admin_password: 'Sanju@1234',
   gstin: '37AAAAA1111A1Z1',
   address: 'Ammavarisala St, Sainagar, Rajampet, Andhra Pradesh 516115',
+  shop_phone: '+919876543210',
   ad_active: true,
   ad_media_type: 'image',
   ad_media_url: 'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=800&auto=format&fit=crop',
