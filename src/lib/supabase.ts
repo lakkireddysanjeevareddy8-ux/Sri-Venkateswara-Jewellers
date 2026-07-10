@@ -732,9 +732,10 @@ export const updateProfile = async (profile: Profile): Promise<Profile> => {
 export const getStoreSettings = async (): Promise<StoreSettings> => {
   if (isRealSupabaseConnected && supabase) {
     const { data, error } = await supabase.from('store_settings').select('*').maybeSingle();
-    if (!error && data) return data;
+    if (!error && data) return { ...DEFAULT_SETTINGS, ...data };
   }
-  return JSON.parse(localStorage.getItem('svj_settings') || JSON.stringify(DEFAULT_SETTINGS));
+  const local = localStorage.getItem('svj_settings');
+  return local ? { ...DEFAULT_SETTINGS, ...JSON.parse(local) } : DEFAULT_SETTINGS;
 };
 
 export const updateStoreSettings = async (settings: StoreSettings): Promise<StoreSettings> => {
