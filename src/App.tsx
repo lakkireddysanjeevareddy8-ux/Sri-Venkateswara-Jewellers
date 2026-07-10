@@ -1313,6 +1313,13 @@ export default function App() {
             }
             loadDatabaseState();
           }}
+          onProfileUpdated={(profile) => {
+            if (profile) {
+              setActiveProfile(profile);
+              localStorage.setItem('svj_active_customer_profile', JSON.stringify(profile));
+              loadDatabaseState();
+            }
+          }}
           onClose={() => setIsProfileOpen(false)}
           onOpenAdmin={() => {
             if (localStorage.getItem('svj_admin_authenticated') === 'true') {
