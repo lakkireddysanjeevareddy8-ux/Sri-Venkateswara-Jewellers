@@ -926,6 +926,5 @@ Please let me know if this article is currently available for a customized virtu
           </div>
         )}
       </div>
-    </div>
   );
 };
