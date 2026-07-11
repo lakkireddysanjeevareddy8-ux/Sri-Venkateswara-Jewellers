@@ -415,121 +415,122 @@ Please let me know if this article is currently available for a customized virtu
           </div>
 
           {/* RIGHT COLUMN: Specs, Actions & Reviews */}
-          <div className="lg:col-span-6 flex flex-col gap-6 md:gap-8">
-            <div>
-              {/* SKU and Type */}
-              <div className="flex items-center gap-2">
-                <span
-                  className="rounded-none px-2.5 py-0.5 text-[10px] font-bold uppercase tracking-wider text-white font-mono"
-                  style={{ backgroundColor: primaryColor }}
-                >
-                  {product.purity_type}
+          <div className="lg:col-span-6 flex flex-col">
+            
+            {/* New Amazon-style Exact Layout */}
+            <div className="flex flex-col font-sans mb-1">
+              {/* First line: Badge and Deal Text */}
+              {amazonSavingsValue > 0 && (
+                <div className="flex items-center gap-2 mb-2">
+                  <span className="bg-[#CC0C39] text-white text-[12px] font-bold px-1.5 py-0.5 rounded-sm">
+                    {amazonSavingsPercent}% OFF
+                  </span>
+                  <span className="text-[#CC0C39] text-[14px] font-medium">Limited deal</span>
+                </div>
+              )}
+              
+              {/* Second line: Price and MRP */}
+              <div className="flex items-baseline gap-2 mt-0.5">
+                <span className="text-[#0F1111] text-[28px] sm:text-[32px] leading-none font-bold">
+                  {formattedAmazonDealIncl}
                 </span>
-                <span className="text-xs font-semibold uppercase tracking-widest text-stone-400 font-mono">
-                  SKU: {product.SKU}
-                </span>
+                {amazonSavingsValue > 0 && (
+                  <span className="text-[#565959] text-[14px]">
+                    M.R.P.: <span className="line-through">{formattedAmazonMRP}</span>
+                  </span>
+                )}
               </div>
 
-              {/* Title and Favorite Button */}
+              {/* Third line: Product Title */}
               <div className="flex items-start justify-between gap-4 mt-2.5">
-                <h2 className="font-serif text-2xl sm:text-3xl font-bold text-stone-900 leading-tight">
+                <h1 className="text-[#0F1111] text-[18px] sm:text-[20px] font-normal leading-snug">
                   {product.name}
-                </h2>
+                </h1>
                 {onToggleFavorite && (
                   <button
                     onClick={() => onToggleFavorite(product.id)}
-                    className="p-3 rounded-full border border-stone-200 bg-white hover:bg-rose-50 hover:border-rose-200 text-stone-600 transition-all cursor-pointer shadow-xs shrink-0 flex items-center justify-center group"
+                    className="shrink-0 group focus:outline-hidden p-1.5 -mr-1.5"
                     title={isFavorite ? "Remove from Favorites" : "Add to Favorites"}
                   >
                     <Heart
                       className={`h-5 w-5 transition-transform duration-300 group-hover:scale-110 ${
-                        isFavorite ? 'fill-rose-500 text-rose-500' : 'text-stone-400 group-hover:text-rose-500'
+                        isFavorite ? 'fill-[#CC0C39] text-[#CC0C39]' : 'text-[#565959] group-hover:text-[#CC0C39]'
                       }`}
                     />
                   </button>
                 )}
               </div>
 
-              {/* Reviews Average */}
-              <div className="mt-3 flex items-center gap-2 text-sm text-stone-600">
-                <div className="flex text-amber-500">
-                  {Array.from({ length: 5 }).map((_, i) => (
-                    <Star
-                      key={i}
-                      className={`h-4 w-4 ${
-                        i < Math.round(Number(avgRating)) ? 'fill-current' : 'text-stone-300'
-                      }`}
-                    />
-                  ))}
+              {/* Swatches and Badges Row */}
+              <div className="mt-8 mb-4">
+                <div className="flex items-center justify-between text-[11px] uppercase tracking-wider text-[#888] font-mono font-medium mb-3">
+                  <span>{product.product_type}</span>
+                  <span>SKU: {product.SKU}</span>
                 </div>
-                <span className="font-bold text-stone-850">{avgRating} / 5.0</span>
-                <span className="text-stone-400">•</span>
-                <span className="text-stone-500 font-mono">{productReviews.length} Verified Reviews</span>
+                
+                <div className="flex items-center justify-between flex-wrap gap-y-3">
+                  <div className="flex items-center gap-4">
+                    {/* Swatches (Visual representation) */}
+                    <div className="flex items-center gap-1">
+                      <div className="w-[14px] h-[14px] rounded-full border border-stone-300 bg-[#E5D3B3] shadow-inner"></div>
+                      <div className="w-[14px] h-[14px] rounded-full border border-stone-300 bg-[#E0E2E5] shadow-inner"></div>
+                      <span className="text-[#0F1111] text-xs font-semibold ml-0.5 mr-1">+2</span>
+                      
+                      <div className="w-[14px] h-[14px] rounded-full border border-stone-300 bg-[#D4AF37] shadow-inner ml-1"></div>
+                      <div className="w-[14px] h-[14px] rounded-full border border-stone-300 bg-[#C0C0C0] shadow-inner"></div>
+                      <span className="text-[#0F1111] text-xs font-semibold ml-0.5">+3</span>
+                    </div>
+                    {/* Weight Badge */}
+                    <span className="bg-[#F0F2F2] border border-[#D5D9D9] text-[#0F1111] text-xs font-bold px-1.5 py-0.5 rounded-sm shadow-xs font-sans">
+                      {product.weight_grams.toFixed(2)}g
+                    </span>
+                  </div>
+
+                  {/* Trust Badges */}
+                  <div className="flex items-center gap-1 font-sans">
+                    <span className="text-[#007185] text-[13px] font-bold hover:underline cursor-pointer tracking-tight">
+                      Deals from this brand
+                    </span>
+                    <span className="text-[#007185] mx-0.5 text-xs">•</span>
+                    <span className="text-[#007185] font-bold bg-[#E6F5EC] border border-[#83D39A] px-1 py-0.5 rounded-sm text-[10px] tracking-tight">
+                      916 CERT
+                    </span>
+                  </div>
+                </div>
               </div>
 
-              {/* Pricing Section */}
-              <div className="mt-6 rounded-none bg-white p-5 border border-stone-200 shadow-xs">
-                <div className="flex items-center justify-between flex-wrap gap-2">
-                  <span className="text-[10px] block font-bold text-stone-400 uppercase tracking-widest font-mono">
-                    Estimated Customer Value Today
-                  </span>
-                  <div className="flex items-center gap-1.5 bg-stone-50 border border-stone-200 px-2.5 py-1 rounded-lg">
-                    <Globe className="h-3 w-3 text-stone-500" />
-                    <select
-                      value={selectedCurrency}
-                      onChange={(e) => onCurrencyChange(e.target.value as CurrencyCode)}
-                      className="bg-transparent border-none text-[10px] font-bold text-stone-700 focus:outline-hidden cursor-pointer font-mono"
-                    >
-                      {Object.values(CURRENCIES).map((cur) => (
-                        <option key={cur.code} value={cur.code}>
-                          {cur.code} ({cur.symbol})
-                        </option>
-                      ))}
-                    </select>
-                  </div>
-                </div>
-                {/* Amazon Exact Pricing Replication Widget */}
-                <div className="mt-3 bg-[#FCF8F3]/40 border border-[#F5EAD4] rounded-xl p-4.5 space-y-3">
-                  <div className="flex flex-col text-left font-sans select-none">
-                    {/* First line: Percentage, Deal Price, Rate per gram */}
-                    <div className="flex items-baseline gap-2 flex-wrap">
-                      {amazonSavingsValue > 0 && (
-                        <span className="text-[#CC0C39] text-3xl sm:text-[38px] font-light leading-none">
-                          -{amazonSavingsPercent}%
-                        </span>
-                      )}
-                      <span className="text-stone-900 text-3xl sm:text-[38px] font-semibold leading-none tracking-tight">
-                        {formattedAmazonDealIncl}
-                      </span>
-                      <span className="text-[#565959] text-[13px] sm:text-[14px] font-normal">
-                        ({convertAndFormatPrice(standardDailyRate, selectedCurrency)} / g)
-                      </span>
-                    </div>
+              {/* Divider */}
+              <div className="w-full h-px bg-[#E7E7E7] mt-1 mb-3"></div>
 
-                    {/* Second line: M.R.P. */}
-                    {amazonSavingsValue > 0 && (
-                      <div className="text-[#565959] text-[13px] sm:text-[14px] font-normal mt-1 flex items-center gap-1">
-                        <span>M.R.P.:</span>
-                        <span className="line-through">{formattedAmazonMRP}</span>
-                      </div>
-                    )}
+              {/* Transparent Price Breakdown text */}
+              <div className="text-[11px] font-bold text-[#888] tracking-widest uppercase mb-1">
+                Transparent Price Breakdown
+              </div>
+              
+              {/* Inclusive of all taxes */}
+              <div className="text-[#565959] text-[12px] font-mono text-right mt-3 w-full flex justify-end">
+                Inclusive of all taxes
+              </div>
+            </div>
 
-                    {/* Third line: You Save details */}
-                    {amazonSavingsValue > 0 && (
-                      <div className="text-[#565959] text-[13px] sm:text-[14px] font-normal mt-1 flex items-baseline gap-1">
-                        <span>You Save:</span>
-                        <span className="text-[#B12704] font-semibold">{formattedAmazonSavings} ({amazonSavingsPercent}%)</span>
-                      </div>
-                    )}
+            {/* Currency Selector (Preserved from old layout) */}
+            <div className="flex items-center justify-end gap-1 mt-1 mb-2">
+              <Globe className="h-3 w-3 text-stone-400" />
+              <select
+                value={selectedCurrency}
+                onChange={(e) => onCurrencyChange(e.target.value as CurrencyCode)}
+                className="bg-transparent border-none text-[10px] font-medium text-stone-500 focus:outline-hidden cursor-pointer font-mono"
+              >
+                {Object.values(CURRENCIES).map((cur) => (
+                  <option key={cur.code} value={cur.code}>
+                    {cur.code} ({cur.symbol})
+                  </option>
+                ))}
+              </select>
+            </div>
 
-                    {/* Fourth line: Inclusive of all taxes */}
-                    <div className="text-[#0F1111] text-[14px] sm:text-[15px] font-semibold mt-2">
-                      Inclusive of all taxes
-                    </div>
-                  </div>
-
-                  {/* Formula details sheet tucked neatly under a beautiful modern details fold */}
-                  <details className="group border-t border-stone-200/60 pt-2.5 mt-2.5">
+            {/* Formula details sheet tucked neatly under a beautiful modern details fold */}
+            <details className="group border-t border-stone-200/60 pt-2.5 mt-1">
                     <summary className="flex items-center justify-between text-[11px] font-semibold text-stone-500 hover:text-stone-800 cursor-pointer uppercase tracking-wider font-mono select-none">
                       <span>Transparent Pricing Formulas & Rates</span>
                       <span className="transition-transform duration-200 group-open:rotate-180 text-[10px]">▼</span>
