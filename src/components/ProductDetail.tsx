@@ -442,23 +442,10 @@ Please let me know if this article is currently available for a customized virtu
               </div>
 
               {/* Third line: Product Title */}
-              <div className="flex items-start justify-between gap-4 mt-2.5">
+              <div className="mt-1.5">
                 <h1 className="text-[#0F1111] text-[18px] sm:text-[20px] font-normal leading-snug">
                   {product.name}
                 </h1>
-                {onToggleFavorite && (
-                  <button
-                    onClick={() => onToggleFavorite(product.id)}
-                    className="shrink-0 group focus:outline-hidden p-1.5 -mr-1.5"
-                    title={isFavorite ? "Remove from Favorites" : "Add to Favorites"}
-                  >
-                    <Heart
-                      className={`h-5 w-5 transition-transform duration-300 group-hover:scale-110 ${
-                        isFavorite ? 'fill-[#CC0C39] text-[#CC0C39]' : 'text-[#565959] group-hover:text-[#CC0C39]'
-                      }`}
-                    />
-                  </button>
-                )}
               </div>
 
               {/* Swatches and Badges Row */}
