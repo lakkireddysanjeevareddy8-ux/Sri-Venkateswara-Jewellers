@@ -627,6 +627,8 @@ Please let me know if this article is currently available for a customized virtu
                       </div>
                     </div>
                   </details>
+                </div>
+              </div>
 
               {/* Detailed Specifications */}
               <h3 className="mt-8 text-xs font-bold uppercase tracking-wider text-stone-700 font-mono">
