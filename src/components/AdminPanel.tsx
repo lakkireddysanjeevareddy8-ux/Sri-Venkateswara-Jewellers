@@ -1899,7 +1899,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                                                 value={footerCopyright}
                                                 onChange={(e) => setFooterCopyright(e.target.value)}
                                                 className="mt-1 w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2.5 text-xs focus:border-[#936C31] focus:outline-hidden"
-                                                placeholder="e.g. © 2026 Nazeer Jewellers."
+                                                placeholder="e.g. © 2026 Sri Venkateswara Jewellers."
                                             />
                                             <span className="text-[9px] text-stone-400 mt-1 block">Customize the copyright line at the very bottom-left.</span>
                                         </div>

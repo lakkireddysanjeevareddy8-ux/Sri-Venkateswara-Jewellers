@@ -562,7 +562,7 @@ export const syncWithServer = async (isStartup = false): Promise<void> => {
       const loadedSettingsStr = localStorage.getItem('svj_settings');
       if (loadedSettingsStr || memoryCache['svj_settings']) {
         const parsed = memoryCache['svj_settings'] || JSON.parse(loadedSettingsStr as string);
-        if (parsed.shop_name === 'Nazeer Jewellers' || parsed.shop_name === 'Nazeer Jewellers') {
+        if (parsed.shop_name === 'Nazeer Jewellers') {
           parsed.shop_name = 'Sri Venkateswara Jewellers';
           localStorage.setItem('svj_settings', JSON.stringify(parsed));
           await pushLocalStateToServer();
@@ -640,7 +640,7 @@ const initLocalStorageDB = () => {
   if (existingSettings) {
     try {
       const parsed = JSON.parse(existingSettings);
-      if (parsed.shop_name === 'Nazeer Jewellers' || parsed.shop_name === 'Nazeer Jewellers') {
+      if (parsed.shop_name === 'Nazeer Jewellers') {
         // Clear out old keys to force a fresh seed matching the new layout and shop name perfectly
         localStorage.removeItem('svj_settings');
         localStorage.removeItem('svj_profiles');
