@@ -415,8 +415,8 @@ Please let me know if this article is currently available for a customized virtu
           </div>
 
           {/* RIGHT COLUMN: Specs, Actions & Reviews */}
-          <div className="lg:col-span-6 flex flex-col">
-            
+          <div className="lg:col-span-6 flex flex-col gap-6 md:gap-8">
+            <div>
             {/* New Amazon-style Exact Layout */}
             <div className="flex flex-col font-sans mb-1">
               {/* First line: Badge and Deal Text */}
