@@ -836,13 +836,18 @@ export default function App() {
                   playsInline
                   className="w-full h-full object-cover transition-transform duration-550 group-hover:scale-105"
                 />
-              ) : (
+              ) : settings.ad_media_url ? (
                 <img
-                  src={settings.ad_media_url || 'https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=800&auto=format&fit=crop'}
+                  src={settings.ad_media_url}
                   alt={settings.ad_title || 'Showcase'}
                   className="w-full h-full object-cover transition-transform duration-550 group-hover:scale-105"
                   referrerPolicy="no-referrer"
                 />
+              ) : (
+                <div className="w-full h-full bg-[#1A1A1A] flex flex-col items-center justify-center p-6 text-center border-r border-[#D4AF37]/20">
+                  <span className="text-[#D4AF37] font-serif text-xl opacity-70 mb-2">SVJ Exclusive</span>
+                  <span className="text-stone-400 text-xs font-mono uppercase tracking-widest opacity-50">Showcase Featured</span>
+                </div>
               )}
             </div>
 
