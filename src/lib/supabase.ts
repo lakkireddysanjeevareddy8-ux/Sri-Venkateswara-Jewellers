@@ -534,7 +534,7 @@ export const memoryCache: Record<string, any> = {};
 
 export const syncWithServer = async (isStartup = false): Promise<void> => {
   try {
-    const res = await fetch('/api/db');
+    const res = await fetch(`/api/db?t=${Date.now()}`);
     if (!res.ok) return;
     const serverData = await res.json();
     
@@ -596,11 +596,14 @@ export const pushLocalStateToServer = async (overrides?: Record<string, any>): P
         }
       }
     });
-    await fetch('/api/db', {
+    const res = await fetch('/api/db', {
       method: 'POST',
       headers: { 'Content-Type': 'application/json' },
       body: JSON.stringify(payload)
     });
+    if (!res.ok) {
+      console.error('Failed to push state to server. Status:', res.status);
+    }
   } catch (error) {
     console.error('Failed to push state to server:', error);
   }
