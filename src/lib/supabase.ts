@@ -608,12 +608,12 @@ export const pushLocalStateToServer = async (overrides?: Record<string, any>): P
 
 // Helper to notify active listeners
 const triggerSimulationSync = async (overrides?: Record<string, any>): Promise<void> => {
-  window.dispatchEvent(new CustomEvent(SIM_DB_UPDATE_EVENT));
   try {
     await pushLocalStateToServer(overrides);
   } catch (err) {
     console.error("Error pushing local state to server:", err);
   }
+  window.dispatchEvent(new CustomEvent(SIM_DB_UPDATE_EVENT));
 };
 
 // ==========================================
@@ -786,7 +786,7 @@ export const updateStoreSettings = async (settings: StoreSettings): Promise<Stor
       console.error("Supabase updateStoreSettings error:", error);
     }
     if (!error) {
-      triggerSimulationSync();
+      await triggerSimulationSync();
       return data || payload;
     }
   }
@@ -796,7 +796,7 @@ export const updateStoreSettings = async (settings: StoreSettings): Promise<Stor
   } catch (err) {
     console.warn('localStorage quota exceeded. Pushing state directly to server.', err);
   }
-  triggerSimulationSync({ svj_settings: settings });
+  await triggerSimulationSync({ svj_settings: settings });
   return settings;
 };
 
