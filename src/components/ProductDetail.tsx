@@ -490,83 +490,53 @@ Please let me know if this article is currently available for a customized virtu
                 </div>
 
                 {/* Amazon Exact Pricing Replication Widget */}
-                <div className="bg-[#FCF8F3]/40 border border-[#F5EAD4] rounded-xl p-4.5 space-y-3">
+                <div className="bg-[#FCF8F3]/40 border border-[#F5EAD4] rounded-xl p-4.5 mb-4">
                   <div className="flex flex-col text-left font-sans select-none">
                     
-                    {/* First line: Amazon style Badge and Deal */}
-                    {amazonSavingsValue > 0 && (
-                      <div className="flex items-center gap-2 mb-1.5">
-                        <span className="bg-[#CC0C39] text-white text-[12px] font-bold px-1.5 py-0.5 rounded-sm">
-                          {amazonSavingsPercent}% OFF
+                    {/* First line: Percentage, Deal Price, Rate per gram */}
+                    <div className="flex items-baseline gap-2 flex-wrap">
+                      {amazonSavingsValue > 0 && (
+                        <span className="text-[#CC0C39] text-3xl sm:text-[34px] font-light leading-none tracking-tight">
+                          -{amazonSavingsPercent}%
                         </span>
-                        <span className="text-[#CC0C39] text-[14px] font-medium">Limited deal</span>
+                      )}
+                      <span className="text-stone-900 text-3xl sm:text-[36px] font-bold leading-none tracking-tight">
+                        {formattedAmazonDealIncl}
+                      </span>
+                      <span className="text-[#565959] text-[13px] sm:text-[14px] font-normal ml-0.5">
+                        ({convertAndFormatPrice(standardDailyRate, selectedCurrency)} / g)
+                      </span>
+                    </div>
+
+                    {/* Second line: M.R.P. */}
+                    {amazonSavingsValue > 0 && (
+                      <div className="text-[#565959] text-[13px] sm:text-[14px] font-normal mt-2 flex items-center gap-1">
+                        <span>M.R.P.:</span>
+                        <span className="line-through">{formattedAmazonMRP}</span>
                       </div>
                     )}
 
-                    {/* Second line: Price, Rate per gram & MRP */}
-                    <div className="flex items-baseline gap-2 flex-wrap">
-                      <span className="text-stone-900 text-3xl sm:text-[38px] font-bold leading-none tracking-tight">
-                        {formattedAmazonDealIncl}
-                      </span>
-                      {amazonSavingsValue > 0 && (
-                        <span className="text-[#565959] text-[14px] ml-1">
-                          M.R.P.: <span className="line-through">{formattedAmazonMRP}</span>
-                        </span>
-                      )}
-                    </div>
-                    
-                    {/* Rate per gram (Subtle) */}
-                    <div className="text-[#565959] text-[13px] sm:text-[14px] font-normal mt-1">
-                      ({convertAndFormatPrice(standardDailyRate, selectedCurrency)} / g)
-                    </div>
-
                     {/* Third line: You Save details */}
                     {amazonSavingsValue > 0 && (
-                      <div className="text-[#565959] text-[13px] sm:text-[14px] font-normal mt-1.5 flex items-baseline gap-1">
+                      <div className="text-[#565959] text-[13px] sm:text-[14px] font-normal mt-1 flex items-baseline gap-1">
                         <span>You Save:</span>
                         <span className="text-[#B12704] font-semibold">{formattedAmazonSavings} ({amazonSavingsPercent}%)</span>
                       </div>
                     )}
 
-                    {/* Inclusive of all taxes */}
+                    {/* Fourth line: Inclusive of all taxes */}
                     <div className="text-[#0F1111] text-[14px] sm:text-[15px] font-semibold mt-3">
                       Inclusive of all taxes
                     </div>
-                    
-                    {/* Amazon-style Swatches & Trust Badges */}
-                    <div className="flex items-center justify-between flex-wrap gap-y-3 mt-4 pt-4 border-t border-[#E7E7E7]">
-                      <div className="flex items-center gap-3">
-                        <div className="flex items-center gap-1">
-                          <div className="w-[14px] h-[14px] rounded-full border border-stone-300 bg-[#E5D3B3] shadow-inner"></div>
-                          <div className="w-[14px] h-[14px] rounded-full border border-stone-300 bg-[#E0E2E5] shadow-inner"></div>
-                          <span className="text-[#0F1111] text-xs font-semibold ml-0.5 mr-1">+2</span>
-                          
-                          <div className="w-[14px] h-[14px] rounded-full border border-stone-300 bg-[#D4AF37] shadow-inner ml-1"></div>
-                          <div className="w-[14px] h-[14px] rounded-full border border-stone-300 bg-[#C0C0C0] shadow-inner"></div>
-                          <span className="text-[#0F1111] text-xs font-semibold ml-0.5">+3</span>
-                        </div>
-                        <span className="bg-[#F0F2F2] border border-[#D5D9D9] text-[#0F1111] text-xs font-bold px-1.5 py-0.5 rounded-sm shadow-xs font-sans">
-                          {product.weight_grams.toFixed(2)}g
-                        </span>
-                      </div>
-                      <div className="flex items-center gap-1 font-sans">
-                        <span className="text-[#007185] text-[13px] font-bold hover:underline cursor-pointer tracking-tight">
-                          Deals from this brand
-                        </span>
-                        <span className="text-[#007185] mx-0.5 text-xs">•</span>
-                        <span className="text-[#007185] font-bold bg-[#E6F5EC] border border-[#83D39A] px-1 py-0.5 rounded-sm text-[10px] tracking-tight">
-                          916 CERT
-                        </span>
-                      </div>
-                    </div>
                   </div>
+                </div>
 
-                  {/* Formula details sheet tucked neatly under a beautiful modern details fold */}
-                  <details className="group border-t border-stone-200/60 pt-3 mt-2">
-                    <summary className="flex items-center justify-between text-[11px] font-semibold text-stone-500 hover:text-stone-800 cursor-pointer uppercase tracking-wider font-mono select-none">
-                      <span>Transparent Pricing Formulas & Rates</span>
-                      <span className="transition-transform duration-200 group-open:rotate-180 text-[10px]">▼</span>
-                    </summary>
+                {/* Formula details sheet tucked neatly under a beautiful modern details fold */}
+                <details className="group border-t border-stone-150/80 pt-3">
+                  <summary className="flex items-center justify-between text-[10px] font-bold text-stone-600 hover:text-stone-900 cursor-pointer uppercase tracking-widest font-mono select-none">
+                    <span>Transparent Pricing Formulas & Rates</span>
+                    <span className="transition-transform duration-200 group-open:rotate-180 text-[10px]">▼</span>
+                  </summary>
                     <div className="mt-3.5 text-[11px] text-stone-600 font-mono space-y-2.5 bg-white/70 border border-stone-200/50 p-3 rounded-xl">
                       <div className="flex justify-between">
                         <span>Gold/Silver Piece Weight:</span>
