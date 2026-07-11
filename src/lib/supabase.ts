@@ -592,7 +592,11 @@ export const pushLocalStateToServer = async (overrides?: Record<string, any>): P
       } else {
         const val = localStorage.getItem(key);
         if (val) {
-          payload[key] = JSON.parse(val);
+          try {
+            payload[key] = JSON.parse(val);
+          } catch (e) {
+            console.error(`Failed to parse localStorage key ${key} during push:`, e);
+          }
         }
       }
     });
