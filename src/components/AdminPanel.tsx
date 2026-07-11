@@ -27,6 +27,7 @@ interface AdminPanelProps {
     promoOffer: PromotionalOffer;
     onRefresh: () => void;
     onClose: () => void;
+    onPreviewProduct?: (p: Product) => void;
 }
 
 export const AdminPanel: React.FC<AdminPanelProps> = ({
@@ -36,6 +37,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     promoOffer,
     onRefresh,
     onClose,
+    onPreviewProduct,
 }) => {
     // Navigation Tabs
     const [activeTab, setActiveTab] = useState<'rates' | 'theme' | 'whatsapp' | 'inventory' | 'promo' | 'db_setup' | 'notifications'>('rates');
@@ -740,7 +742,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             // Auto-generate a beautiful unique SKU if left empty
             const finalSKU = prodSKU.trim()
                 ? prodSKU.trim().toUpperCase()
-                : `SVJ-${prodMainCat === 'Gold' ? 'G' : 'S'}-${Date.now().toString().slice(-6)}`;
+                : `SVJ-${Date.now().toString().slice(-6)}`;
 
             // Default to 10 grams if weight is not filled or invalid
             const finalWeight = prodWeight > 0 ? Number(prodWeight) : 10.000;
@@ -893,14 +895,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                             Vault Workspace Suite
                         </h1>
                         <p className="text-[10px] text-stone-400 font-mono uppercase tracking-widest">
-                            Sri Venkateswara Golden Jewellers
+                            {shopName || 'Sri Venkateswara Jewellers'}
                         </p>
                     </div>
                 </div>
 
                 <div className="flex items-center gap-3">
                     <button
-                        onClick={onRefresh}
+                        onClick={() => window.location.reload()}
                         className="rounded-full p-2 hover:bg-stone-800 text-stone-300 hover:text-white transition-colors cursor-pointer"
                         title="Reload database tables"
                     >
@@ -1702,7 +1704,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                                             value={shopName}
                                             onChange={(e) => setShopName(e.target.value)}
                                             className="mt-1 w-full rounded-xl border border-stone-300 bg-white px-3.5 py-2.5 text-xs focus:border-[#936C31] focus:outline-hidden"
-                                            placeholder="e.g. Nazeer Jewellers"
+                                            placeholder="e.g. Sri Venkateswara Jewellers"
                                             required
                                         />
                                     </div>
@@ -1861,7 +1863,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
 
                                                     return `${fClass} ${iClass} ${bClass} ${sClass}`;
                                                 })()}`}>
-                                                {shopName || 'Sri Venkateswara Golden Jewellers'}
+                                                {shopName || 'Sri Venkateswara Jewellers'}
                                             </h4>
                                         </div>
                                     </div>
@@ -2854,7 +2856,10 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                                                                 return (
                                                                     <tr
                                                                         key={prod.id}
-                                                                        className={`transition-colors border-b border-stone-150 ${isLowStock
+                                                                        onClick={() => {
+                                                                            if (onPreviewProduct) onPreviewProduct(prod);
+                                                                        }}
+                                                                        className={`transition-colors border-b border-stone-150 cursor-pointer ${isLowStock
                                                                                 ? 'bg-amber-50/50 hover:bg-amber-100/50 border-l-4 border-l-amber-500'
                                                                                 : 'hover:bg-stone-50/50'
                                                                             }`}
@@ -2907,7 +2912,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                                                                         <td className="whitespace-nowrap px-4 py-3 text-center">
                                                                             <div className="flex flex-col items-center gap-1">
                                                                                 <button
-                                                                                    onClick={() => handleToggleStockStatus(prod)}
+                                                                                    onClick={(e) => { e.stopPropagation(); handleToggleStockStatus(prod); }}
                                                                                     className={`rounded-full px-2.5 py-0.5 text-[10px] font-bold uppercase transition-all cursor-pointer ${prod.is_in_stock
                                                                                             ? isLowStock
                                                                                                 ? 'bg-amber-100 text-amber-900 border border-amber-300'
@@ -2926,14 +2931,14 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                                                                         <td className="whitespace-nowrap px-4 py-3 text-center">
                                                                             <div className="flex items-center justify-center gap-1.5">
                                                                                 <button
-                                                                                    onClick={() => startEditingProduct(prod)}
+                                                                                    onClick={(e) => { e.stopPropagation(); startEditingProduct(prod); }}
                                                                                     className="rounded-lg bg-amber-50 hover:bg-amber-100 p-1.5 text-amber-700 hover:text-amber-800 transition-colors cursor-pointer"
                                                                                     title="Edit product specs and photos"
                                                                                 >
                                                                                     <Edit className="h-4 w-4" />
                                                                                 </button>
                                                                                 <button
-                                                                                    onClick={() => handleDeleteProduct(prod.id)}
+                                                                                    onClick={(e) => { e.stopPropagation(); handleDeleteProduct(prod.id); }}
                                                                                     className="rounded-lg bg-rose-50 hover:bg-rose-100 p-1.5 text-rose-600 hover:text-rose-700 transition-colors cursor-pointer"
                                                                                     title="Delete product permanently"
                                                                                 >

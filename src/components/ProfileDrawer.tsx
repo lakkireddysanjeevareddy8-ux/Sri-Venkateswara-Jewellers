@@ -69,9 +69,10 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
   // Helper: Retrieve passwords map
   const getPasswordsMap = (): Record<string, string> => {
     const defaultMap: Record<string, string> = {
+      'pathanadnankhan09@gmail.com': 'password123',
+      'srivenkateswarajewellers@gmail.com': 'password123',
       'lakkireddysanjeevareddy8@gmail.com': 'password123',
-      'sanjeev.lakkireddy@gmail.com': 'sanjeev123',
-      'guest.jewellery@gmail.com': 'guest123'
+      'pathanfarhankhan3309@gmail.com': 'password123'
     };
     try {
       const raw = localStorage.getItem('svj_passwords');

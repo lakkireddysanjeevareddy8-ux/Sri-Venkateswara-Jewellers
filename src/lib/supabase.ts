@@ -493,24 +493,31 @@ const DEFAULT_REVIEWS: Review[] = [
 const DEFAULT_PROFILES: Profile[] = [
   {
     id: 'p-1',
-    username: 'Sanjeeva Reddy',
-    email: 'lakkireddysanjeevareddy8@gmail.com',
-    phone_number: '+919900887766',
-    shipping_address: 'Ammavarisala St, Sainagar, Rajampet, Andhra Pradesh 516115'
+    username: 'Pathan Adnan Khan',
+    email: 'pathanadnankhan09@gmail.com',
+    phone_number: '0000000000',
+    shipping_address: ''
   },
   {
     id: 'p-2',
-    username: 'SVJ Rajampet',
-    email: 'svj.rajampet@gmail.com',
-    phone_number: '8500226521',
-    shipping_address: 'Rajampet, Andhra Pradesh - 516115'
+    username: 'Sri Venkateswara Jewellers',
+    email: 'srivenkateswarajewellers@gmail.com',
+    phone_number: '+917780103341',
+    shipping_address: ''
   },
   {
     id: 'p-3',
-    username: 'Bharath',
-    email: 'kothurubharath@gmail.com',
-    phone_number: '8500226521',
-    shipping_address: 'Andhra Pradesh'
+    username: 'Sanjeeva Reddy',
+    email: 'lakkireddysanjeevareddy8@gmail.com',
+    phone_number: '+919701635098',
+    shipping_address: ''
+  },
+  {
+    id: 'p-4',
+    username: 'Pathan Farhan Khan',
+    email: 'pathanfarhankhan3309@gmail.com',
+    phone_number: '0000000000',
+    shipping_address: ''
   }
 ];
 
@@ -555,7 +562,7 @@ export const syncWithServer = async (isStartup = false): Promise<void> => {
       const loadedSettingsStr = localStorage.getItem('svj_settings');
       if (loadedSettingsStr || memoryCache['svj_settings']) {
         const parsed = memoryCache['svj_settings'] || JSON.parse(loadedSettingsStr as string);
-        if (parsed.shop_name === 'Nazeer Jewellers' || parsed.shop_name === 'Sri Venkateswara Golden Jewellers') {
+        if (parsed.shop_name === 'Nazeer Jewellers' || parsed.shop_name === 'Nazeer Jewellers') {
           parsed.shop_name = 'Sri Venkateswara Jewellers';
           localStorage.setItem('svj_settings', JSON.stringify(parsed));
           await pushLocalStateToServer();
@@ -633,7 +640,7 @@ const initLocalStorageDB = () => {
   if (existingSettings) {
     try {
       const parsed = JSON.parse(existingSettings);
-      if (parsed.shop_name === 'Sri Venkateswara Golden Jewellers' || parsed.shop_name === 'Nazeer Jewellers') {
+      if (parsed.shop_name === 'Nazeer Jewellers' || parsed.shop_name === 'Nazeer Jewellers') {
         // Clear out old keys to force a fresh seed matching the new layout and shop name perfectly
         localStorage.removeItem('svj_settings');
         localStorage.removeItem('svj_profiles');
@@ -1091,7 +1098,7 @@ export const processStockNotificationsForProduct = async (product: Product): Pro
   const nowStr = new Date().toISOString();
 
   // Try fetching current settings for high fidelity price/branding information
-  let shopName = "Sri Venkateswara Golden Jewellers (Nazeer Jewellers)";
+  let shopName = "Sri Venkateswara Jewellers";
   let rawMetalRate = 0;
   let estimatedPriceStr = "Pricing determined on request";
   let gstinStr = "";
@@ -1181,8 +1188,8 @@ ${product.image_urls && product.image_urls.length > 1 ? `• Additional View Ang
 ========================================================================
 🛍️ HOW TO PURCHASE & CONTACT OPTIONS:
 ========================================================================
-1. WhatsApp Priority Desk: Open your digital catalog in Sri Venkateswara Golden Jewellers (Nazeer Jewellers), tap on WhatsApp to chat with our staff, and refer to SKU ${product.SKU} for prompt reservation.
-2. Store Visit: Walk into Sri Venkateswara Golden Jewellers (Nazeer Jewellers) with this email code to check weight certifications or handle booking.
+1. WhatsApp Priority Desk: Open your digital catalog in ${shopName}, tap on WhatsApp to chat with our staff, and refer to SKU ${product.SKU} for prompt reservation.
+2. Store Visit: Walk into ${shopName} with this email code to check weight certifications or handle booking.
 
 Thank you for choosing us to decorate your auspicious moments!
 
@@ -1330,7 +1337,11 @@ CREATE TABLE IF NOT EXISTS products (
   stock_quantity INTEGER DEFAULT 5,
   offer_canceled_rate NUMERIC,
   offer_exclusive_rate NUMERIC,
-  offer_discount_amount NUMERIC
+  offer_discount_amount NUMERIC,
+  has_stone BOOLEAN DEFAULT FALSE,
+  stone_weight_grams NUMERIC,
+  metal_weight_grams NUMERIC,
+  stone_price NUMERIC
 );
 
 -- 3. Create promotional_offers banner layout
@@ -1506,8 +1517,9 @@ INSERT INTO whatsapp_numbers (id, phone_number, reference_name) VALUES
 ON CONFLICT (id) DO NOTHING;
 
 INSERT INTO profiles (id, username, email, phone_number, shipping_address) VALUES
-('p-1', 'Sanjeeva Reddy', 'lakkireddysanjeevareddy8@gmail.com', '+919900887766', 'Ammavarisala St, Sainagar, Rajampet, Andhra Pradesh 516115'),
-('p-2', 'SVJ Rajampet', 'svj.rajampet@gmail.com', '8500226521', 'Rajampet, Andhra Pradesh - 516115'),
-('p-3', 'Bharath', 'kothurubharath@gmail.com', '8500226521', 'Andhra Pradesh')
+('p-1', 'Pathan Adnan Khan', 'pathanadnankhan09@gmail.com', '0000000000', ''),
+('p-2', 'Sri Venkateswara Jewellers', 'srivenkateswarajewellers@gmail.com', '+917780103341', ''),
+('p-3', 'Sanjeeva Reddy', 'lakkireddysanjeevareddy8@gmail.com', '+919701635098', ''),
+('p-4', 'Pathan Farhan Khan', 'pathanfarhankhan3309@gmail.com', '0000000000', '')
 ON CONFLICT (id) DO NOTHING;
 `;

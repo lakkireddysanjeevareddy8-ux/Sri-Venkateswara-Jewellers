@@ -120,6 +120,24 @@ export default function App() {
     window.addEventListener('popstate', handlePopState);
     return () => window.removeEventListener('popstate', handlePopState);
   }, [products]);
+
+  // Handle initial page load with a product URL
+  useEffect(() => {
+    if (products.length > 0 && !selectedProduct) {
+      const match = window.location.pathname.match(/^\/product\/([^/]+)/);
+      if (match) {
+        const id = match[1];
+        const product = products.find((p) => p.id === id);
+        if (product) {
+          setSelectedProduct(product);
+          // Set initial history state if it's empty so back button works correctly
+          if (!window.history.state?.productId) {
+             window.history.replaceState({ productId: product.id, depth: 1 }, '', window.location.pathname);
+          }
+        }
+      }
+    }
+  }, [products, selectedProduct]);
   const [isProfileOpen, setIsProfileOpen] = useState(false);
   const [isPasswordGateOpen, setIsPasswordGateOpen] = useState(false);
   const [isAdminPanelOpen, setIsAdminPanelOpen] = useState(() => {
@@ -324,7 +342,7 @@ export default function App() {
       // No storedEmail at all: don't touch activeProfile here either. Logging a user
       // out is the job of the explicit logout handler, not a side-effect of a data fetch.
     } catch (err) {
-      console.error('Error fetching Sri Venkateswara Golden Jewellers tables', err);
+      console.error('Error fetching Sri Venkateswara Jewellers tables', err);
     } finally {
       setIsLoading(false);
     }
@@ -725,9 +743,10 @@ export default function App() {
 
         <div className="flex items-center gap-3 z-10">
           {activeProfile?.email && [
+            'pathanadnankhan09@gmail.com',
+            'srivenkateswarajewellers@gmail.com',
             'lakkireddysanjeevareddy8@gmail.com',
-            'svj.rajampet@gmail.com',
-            'kothurubharath@gmail.com'
+            'pathanfarhankhan3309@gmail.com'
           ].includes(activeProfile.email.toLowerCase()) && (
             <button
               onClick={() => {
@@ -1383,6 +1402,10 @@ export default function App() {
                 console.error(e);
               }
             }}
+            onPreviewProduct={(p) => {
+              setIsAdminPanelOpen(false);
+              handleOpenProduct(p);
+            }}
           />
         </div>
       )}
@@ -1399,7 +1422,7 @@ export default function App() {
             </button>
             
             <h3 className="font-serif text-lg font-bold text-stone-900">
-              Connect Sri Venkateswara Golden Jewellers to Supabase
+              Connect Sri Venkateswara Jewellers to Supabase
             </h3>
             <p className="text-xs text-stone-500 mt-1">
               Currently running in **Simulated Sandbox Mode** with direct LocalStorage synchronization. Complete these quick steps to hook up your live production relational tables:
@@ -1428,7 +1451,7 @@ export default function App() {
               <div className="border border-stone-200 rounded-xl p-4 bg-stone-50 space-y-1">
                 <span className="font-bold text-amber-800 font-mono block">3. Re-launch / refresh Applet:</span>
                 <p className="text-stone-600">
-                  Once environment tokens propagate, Sri Venkateswara Golden Jewellers will dynamically swap to querying live Postgres tables. Changes made inside the Admin Panel will immediately re-sync on customer screens!
+                  Once environment tokens propagate, Sri Venkateswara Jewellers will dynamically swap to querying live Postgres tables. Changes made inside the Admin Panel will immediately re-sync on customer screens!
                 </p>
               </div>
             </div>

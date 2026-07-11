@@ -187,11 +187,13 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
       year: 'numeric',
     });
 
+    const productLink = window.location.href;
     const inquiryMessage = 
-`Hello Sri Venkateswara Golden Jewellers,
+`Hello ${settings.shop_name || 'Sri Venkateswara Jewellers'},
 
 I am highly interested in querying about this premium jewelry piece:
 ✨ *${product.name}*
+🔗 *Direct Link:* ${productLink}
 🏷️ *SKU:* ${product.SKU}
 ⚖️ *Weight:* ${product.weight_grams.toFixed(2)} grams
 💎 *Purity:* ${product.purity_type} (${product.product_type})
@@ -311,7 +313,7 @@ Please let me know if this article is currently available for a customized virtu
         <div className="hidden sm:flex items-center gap-2 text-center">
           <span className="h-2 w-2 rounded-full bg-[#936C31]" />
           <h1 className="font-serif font-bold text-stone-900 text-xs sm:text-sm md:text-base tracking-wider uppercase">
-            Sri Venkateswara Golden Jewellers
+            {settings.shop_name || 'Sri Venkateswara Jewellers'}
           </h1>
         </div>
         <div className="flex items-center gap-2">

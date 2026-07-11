@@ -44,11 +44,10 @@ export const CustomerLoginGate: React.FC<CustomerLoginGateProps> = ({
 
   const getPasswordsMap = (): Record<string, string> => {
     const defaultMap: Record<string, string> = {
+      'pathanadnankhan09@gmail.com': '8159cfaa',
+      'srivenkateswarajewellers@gmail.com': '8159cfaa',
       'lakkireddysanjeevareddy8@gmail.com': '8159cfaa',
-      'sanjeev.lakkireddy@gmail.com': 'eb039695',
-      'guest.jewellery@gmail.com': 'f563505',
-      'svj.rajampet@gmail.com': '46385e48',
-      'kothurubharath@gmail.com': '46385e48'
+      'pathanfarhankhan3309@gmail.com': '8159cfaa'
     };
     try {
       const raw = localStorage.getItem('svj_passwords');
