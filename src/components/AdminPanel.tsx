@@ -361,11 +361,8 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         if (!file) return;
 
         // Auto detect video vs image
-        if (file.type.startsWith('video/')) {
-            setAdMediaType('video');
-        } else {
-            setAdMediaType('image');
-        }
+        const mediaType = file.type.startsWith('video/') ? 'video' : 'image';
+        setAdMediaType(mediaType);
 
         setIsUploadingAdMedia(true);
         setAdUploadStatus('uploading');
@@ -374,6 +371,15 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
             setAdMediaUrl(url);
             setAdActive(true);
             setAdUploadStatus('completed');
+            
+            // Auto-save for immediate live update
+            await updateStoreSettings({
+                ...settings,
+                ad_media_url: url,
+                ad_active: true,
+                ad_media_type: mediaType
+            });
+            onRefresh();
         } catch (err) {
             setAdUploadStatus('failed');
             alert('Error during ad spotlight media upload');
@@ -422,15 +428,11 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
     };
 
     const handleCancelAd = async () => {
-        setIsSavingRates(true);
+        setIsSavingAd(true);
         setShowCancelAdConfirm(false);
         try {
             await updateStoreSettings({
                 ...settings,
-                gold_22k_rate: Number(gold22k),
-                gold_24k_rate: Number(gold24k),
-                silver_normal_rate: Number(silverNormal),
-                silver_999_rate: Number(silver999),
                 ad_active: false,
                 ad_media_type: 'image',
                 ad_media_url: '',
@@ -450,7 +452,7 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
         } catch (err) {
             alert('Failed to save the cancelled advertisement settings');
         } finally {
-            setIsSavingRates(false);
+            setIsSavingAd(false);
         }
     };
 
@@ -1286,9 +1288,13 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                                                                     {adMediaUrl && (
                                                                         <button
                                                                             type="button"
-                                                                            onClick={() => {
+                                                                            onClick={async () => {
                                                                                 setAdMediaUrl('');
                                                                                 setAdUploadStatus('idle');
+                                                                                try {
+                                                                                    await updateStoreSettings({ ...settings, ad_media_url: '' });
+                                                                                    onRefresh();
+                                                                                } catch(e) {}
                                                                             }}
                                                                             className="px-2.5 py-1 text-[10px] uppercase font-bold border border-rose-200 text-rose-600 hover:bg-rose-50 rounded-lg transition-all"
                                                                         >
