@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Profile, StoreSettings, Product } from '../types';
-import { X, User, Mail, Phone, CheckCircle, Save, ShieldAlert, Heart, Trash2, Globe, MapPin, Sparkles, LogIn, LogOut, ArrowRight, Lock } from 'lucide-react';
+import { X, User, Mail, Phone, CheckCircle, Save, Heart, Trash2, Globe, MapPin, Sparkles, LogIn, LogOut, ArrowRight, Lock } from 'lucide-react';
 import { getProfiles, updateProfile } from '../lib/supabase';
 import { getRateForPurity, calculateJewelryPrice, getExclusiveOfferRateForPurity } from './ProductCard';
 import { CurrencyCode, CURRENCIES, convertAndFormatPrice } from '../lib/currency';
@@ -531,31 +531,6 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
             >
               <LogOut className="h-4 w-4" />
               Sign Out from Showroom
-            </button>
-          </div>
-
-          {/* Administration Access */}
-          <div className="pt-6 border-t border-stone-200 space-y-3">
-            <div className="flex items-center gap-2">
-              <span className="p-1 rounded bg-stone-200 text-stone-700">
-                <ShieldAlert className="h-4 w-4" />
-              </span>
-              <span className="text-[10px] font-bold text-stone-500 uppercase font-mono tracking-wider">
-                Administration Portal
-              </span>
-            </div>
-            <p className="text-[11px] text-stone-500 leading-relaxed font-serif italic">
-              Authorized personnel only. Access daily rate overrides, catalogue items manager, and visual style variables here.
-            </p>
-            <button
-              type="button"
-              onClick={() => {
-                onClose();
-                onOpenAdmin();
-              }}
-              className="w-full border border-[#1A1A1A] bg-[#1A1A1A] hover:bg-[#936C31] hover:border-[#936C31] text-white py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all rounded-none cursor-pointer flex items-center justify-center gap-2"
-            >
-              Open Admin Dashboard
             </button>
           </div>
         </form>
