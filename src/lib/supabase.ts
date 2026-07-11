@@ -530,6 +530,8 @@ const LOCAL_STORAGE_KEYS = [
   'svj_user_wishlists'
 ];
 
+export const memoryCache: Record<string, any> = {};
+
 export const syncWithServer = async (isStartup = false): Promise<void> => {
   try {
     const res = await fetch('/api/db');
@@ -540,14 +542,19 @@ export const syncWithServer = async (isStartup = false): Promise<void> => {
       // Server has state! Update our localStorage
       LOCAL_STORAGE_KEYS.forEach(key => {
         if (serverData[key] !== undefined) {
-          localStorage.setItem(key, JSON.stringify(serverData[key]));
+          memoryCache[key] = serverData[key];
+          try {
+            localStorage.setItem(key, JSON.stringify(serverData[key]));
+          } catch (err) {
+            console.warn(`localStorage quota exceeded for ${key} during sync, relying on memoryCache`);
+          }
         }
       });
 
       // Ensure that if the server contains the older shop name, we update it to 'Sri Venkateswara Jewellers'
       const loadedSettingsStr = localStorage.getItem('svj_settings');
-      if (loadedSettingsStr) {
-        const parsed = JSON.parse(loadedSettingsStr);
+      if (loadedSettingsStr || memoryCache['svj_settings']) {
+        const parsed = memoryCache['svj_settings'] || JSON.parse(loadedSettingsStr as string);
         if (parsed.shop_name === 'Nazeer Jewellers' || parsed.shop_name === 'Sri Venkateswara Golden Jewellers') {
           parsed.shop_name = 'Sri Venkateswara Jewellers';
           localStorage.setItem('svj_settings', JSON.stringify(parsed));
@@ -574,13 +581,19 @@ export const syncWithServer = async (isStartup = false): Promise<void> => {
   }
 };
 
-export const pushLocalStateToServer = async (): Promise<void> => {
+export const pushLocalStateToServer = async (overrides?: Record<string, any>): Promise<void> => {
   try {
     const payload: Record<string, any> = { initialized: true };
     LOCAL_STORAGE_KEYS.forEach(key => {
-      const val = localStorage.getItem(key);
-      if (val) {
-        payload[key] = JSON.parse(val);
+      if (overrides && overrides[key] !== undefined) {
+        payload[key] = overrides[key];
+      } else if (memoryCache[key] !== undefined) {
+        payload[key] = memoryCache[key];
+      } else {
+        const val = localStorage.getItem(key);
+        if (val) {
+          payload[key] = JSON.parse(val);
+        }
       }
     });
     await fetch('/api/db', {
@@ -594,10 +607,10 @@ export const pushLocalStateToServer = async (): Promise<void> => {
 };
 
 // Helper to notify active listeners
-const triggerSimulationSync = async (): Promise<void> => {
+const triggerSimulationSync = async (overrides?: Record<string, any>): Promise<void> => {
   window.dispatchEvent(new CustomEvent(SIM_DB_UPDATE_EVENT));
   try {
-    await pushLocalStateToServer();
+    await pushLocalStateToServer(overrides);
   } catch (err) {
     console.error("Error pushing local state to server:", err);
   }
@@ -756,6 +769,7 @@ export const getStoreSettings = async (): Promise<StoreSettings> => {
     const { data, error } = await supabase.from('store_settings').select('*').maybeSingle();
     if (!error && data) return { ...DEFAULT_SETTINGS, ...data };
   }
+  if (memoryCache['svj_settings']) return { ...DEFAULT_SETTINGS, ...memoryCache['svj_settings'] };
   const local = localStorage.getItem('svj_settings');
   return local ? { ...DEFAULT_SETTINGS, ...JSON.parse(local) } : DEFAULT_SETTINGS;
 };
@@ -776,8 +790,13 @@ export const updateStoreSettings = async (settings: StoreSettings): Promise<Stor
       return data || payload;
     }
   }
-  localStorage.setItem('svj_settings', JSON.stringify(settings));
-  triggerSimulationSync();
+  memoryCache['svj_settings'] = settings;
+  try {
+    localStorage.setItem('svj_settings', JSON.stringify(settings));
+  } catch (err) {
+    console.warn('localStorage quota exceeded. Pushing state directly to server.', err);
+  }
+  triggerSimulationSync({ svj_settings: settings });
   return settings;
 };
 
