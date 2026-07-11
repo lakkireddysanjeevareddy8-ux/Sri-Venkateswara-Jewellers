@@ -1287,12 +1287,22 @@ export const AdminPanel: React.FC<AdminPanelProps> = ({
                                                                     />
                                                                     {adMediaUrl && (
                                                                         <button
-                                                                            type="button"
                                                                             onClick={async () => {
                                                                                 setAdMediaUrl('');
+                                                                                setAdActive(false);
+                                                                                setAdTitle('');
+                                                                                setAdText('');
+                                                                                setAdProductId('');
                                                                                 setAdUploadStatus('idle');
                                                                                 try {
-                                                                                    await updateStoreSettings({ ...settings, ad_media_url: '' });
+                                                                                    await updateStoreSettings({
+                                                                                        ...settings,
+                                                                                        ad_active: false,
+                                                                                        ad_media_url: '',
+                                                                                        ad_title: '',
+                                                                                        ad_text: '',
+                                                                                        ad_product_id: ''
+                                                                                    });
                                                                                     onRefresh();
                                                                                 } catch(e) {}
                                                                             }}
