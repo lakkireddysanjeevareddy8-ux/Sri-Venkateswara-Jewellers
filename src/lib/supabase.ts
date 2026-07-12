@@ -594,8 +594,6 @@ export const pushLocalStateToServer = async (overrides?: Record<string, any>): P
     LOCAL_STORAGE_KEYS.forEach(key => {
       if (overrides && overrides[key] !== undefined) {
         payload[key] = overrides[key];
-      } else if (memoryCache[key] !== undefined) {
-        payload[key] = memoryCache[key];
       } else {
         const val = localStorage.getItem(key);
         if (val) {
@@ -603,7 +601,12 @@ export const pushLocalStateToServer = async (overrides?: Record<string, any>): P
             payload[key] = JSON.parse(val);
           } catch (e) {
             console.error(`Failed to parse localStorage key ${key} during push:`, e);
+            if (memoryCache[key] !== undefined) {
+              payload[key] = memoryCache[key];
+            }
           }
+        } else if (memoryCache[key] !== undefined) {
+          payload[key] = memoryCache[key];
         }
       }
     });
