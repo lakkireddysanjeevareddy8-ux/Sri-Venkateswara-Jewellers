@@ -500,31 +500,33 @@ export default function App() {
   };
 
   // Filter results
-  const filteredProducts = products.filter((prod) => {
-    // 1. Search Query
-    const query = searchQuery.toLowerCase().trim();
-    const matchesSearch = 
-      !query || 
-      prod.name.toLowerCase().includes(query) ||
-      prod.SKU.toLowerCase().includes(query) ||
-      prod.purity_type.toLowerCase().includes(query) ||
-      prod.product_type.toLowerCase().includes(query) ||
-      prod.main_category.toLowerCase().includes(query);
+  const filteredProducts = React.useMemo(() => {
+    return products.filter((prod) => {
+      // 1. Search Query
+      const query = searchQuery.toLowerCase().trim();
+      const matchesSearch = 
+        !query || 
+        prod.name.toLowerCase().includes(query) ||
+        prod.SKU.toLowerCase().includes(query) ||
+        prod.purity_type.toLowerCase().includes(query) ||
+        prod.product_type.toLowerCase().includes(query) ||
+        prod.main_category.toLowerCase().includes(query);
 
-    // 2. Main Category
-    const matchesMainCat = selectedMainCat === 'All' || prod.main_category === selectedMainCat;
+      // 2. Main Category
+      const matchesMainCat = selectedMainCat === 'All' || prod.main_category === selectedMainCat;
 
-    // 3. Purity Filter
-    const matchesPurity = selectedPurity === 'All' || prod.purity_type === selectedPurity;
+      // 3. Purity Filter
+      const matchesPurity = selectedPurity === 'All' || prod.purity_type === selectedPurity;
 
-    // 4. Product Type Style Filter
-    const matchesStyle = selectedStyle === 'All' || prod.product_type === selectedStyle;
+      // 4. Product Type Style Filter
+      const matchesStyle = selectedStyle === 'All' || prod.product_type === selectedStyle;
 
-    // 5. Gender Filter
-    const matchesGender = selectedGender === 'All' || prod.gender_tag === selectedGender;
+      // 5. Gender Filter
+      const matchesGender = selectedGender === 'All' || prod.gender_tag === selectedGender;
 
-    return matchesSearch && matchesMainCat && matchesPurity && matchesStyle && matchesGender;
-  });
+      return matchesSearch && matchesMainCat && matchesPurity && matchesStyle && matchesGender;
+    });
+  }, [products, searchQuery, selectedMainCat, selectedPurity, selectedStyle, selectedGender]);
 
   // Render a clean loading screen during structural checking or local storage parsing
   if (isLoading || !settings) {
