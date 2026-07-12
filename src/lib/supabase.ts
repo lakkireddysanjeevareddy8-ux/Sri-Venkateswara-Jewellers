@@ -29,7 +29,7 @@ export const supabase = isRealSupabaseConnected
 
 const DEFAULT_SETTINGS: StoreSettings = {
   shop_name: 'Sri Venkateswara Jewellers',
-  logo_url: 'https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?q=80&w=200&auto=format&fit=crop',
+  logo_url: '/logo.jpg',
   gold_22k_rate: 13294,
   gold_24k_rate: 14450,
   silver_normal_rate: 220,
@@ -674,6 +674,24 @@ const initLocalStorageDB = () => {
   const existingProds = localStorage.getItem('svj_products');
   if (!existingProds || !existingProds.includes('prod-22')) {
     localStorage.setItem('svj_products', JSON.stringify(DEFAULT_PRODUCTS));
+  } else {
+    try {
+      const parsedProds = JSON.parse(existingProds);
+      let changed = false;
+      if (Array.isArray(parsedProds)) {
+        parsedProds.forEach((p: any) => {
+          if (p.SKU && p.SKU.startsWith('NJ-')) {
+            p.SKU = p.SKU.replace('NJ-', 'SVJ-');
+            changed = true;
+          }
+        });
+      }
+      if (changed) {
+        localStorage.setItem('svj_products', JSON.stringify(parsedProds));
+      }
+    } catch (e) {
+      // Ignore parse errors
+    }
   }
   if (!localStorage.getItem('svj_reviews')) {
     localStorage.setItem('svj_reviews', JSON.stringify(DEFAULT_REVIEWS));

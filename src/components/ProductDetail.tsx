@@ -194,7 +194,7 @@ export const ProductDetail: React.FC<ProductDetailProps> = ({
 I am highly interested in querying about this premium jewelry piece:
 ✨ *${product.name}*
 🔗 *Direct Link:* ${productLink}
-🏷️ *SKU:* ${product.SKU}
+🏷️ *SKU:* ${product.SKU?.replace('NJ-', 'SVJ-')}
 ⚖️ *Weight:* ${product.weight_grams.toFixed(2)} grams
 💎 *Purity:* ${product.purity_type} (${product.product_type})
 💰 *Estimated Price (Rate locked on ${today}):* ${formattedPrice}
@@ -428,7 +428,7 @@ Please let me know if this article is currently available for a customized virtu
                   {product.purity_type}
                 </span>
                 <span className="text-xs font-semibold uppercase tracking-widest text-stone-400 font-mono">
-                  SKU: {product.SKU}
+                  SKU: {product.SKU?.replace('NJ-', 'SVJ-')}
                 </span>
               </div>
 

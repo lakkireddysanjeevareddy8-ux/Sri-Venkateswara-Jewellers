@@ -233,7 +233,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
           {/* 4. Material and SKU code (Amazon ASIN equivalent) */}
           <div className="flex items-center justify-between text-[7px] sm:text-[8px] uppercase font-mono tracking-wider text-stone-400">
             <span>{product.product_type}</span>
-            <span>SKU: {product.SKU}</span>
+            <span>SKU: {product.SKU?.replace('NJ-', 'SVJ-')}</span>
           </div>
 
           {/* 5. Gold / Silver color options indicators (as seen on Amazon card color dots) */}
