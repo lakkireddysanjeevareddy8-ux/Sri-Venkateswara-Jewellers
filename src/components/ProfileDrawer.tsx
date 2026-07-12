@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Profile, StoreSettings, Product } from '../types';
 import { X, User, Mail, Phone, CheckCircle, Save, Heart, Trash2, Globe, MapPin, Sparkles, LogIn, LogOut, ArrowRight, Lock } from 'lucide-react';
-import { getProfiles, updateProfile } from '../lib/supabase';
+import { getProfiles, updateProfile, supabase, isRealSupabaseConnected } from '../lib/supabase';
 import { getRateForPurity, calculateJewelryPrice, getExclusiveOfferRateForPurity } from './ProductCard';
 import { CurrencyCode, CURRENCIES, convertAndFormatPrice } from '../lib/currency';
 
@@ -388,8 +388,24 @@ export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({
 
             <button
               type="button"
-              onClick={() => {
-                alert("Google Sign-In is coming soon!");
+              onClick={async () => {
+                if (isRealSupabaseConnected && supabase) {
+                  try {
+                    const { error: oauthError } = await supabase.auth.signInWithOAuth({
+                      provider: 'google',
+                      options: {
+                        redirectTo: window.location.origin
+                      }
+                    });
+                    if (oauthError) {
+                      alert(oauthError.message);
+                    }
+                  } catch (err) {
+                    alert('Connection failure during Google Login. Try again.');
+                  }
+                } else {
+                  alert('Google Authentication is disabled because Supabase is not connected. To use Google Sign-In, please create a `.env` file at the root of the project and define your actual `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` credentials.');
+                }
               }}
               className="w-full bg-white hover:bg-stone-50 text-stone-700 py-3 text-xs font-bold uppercase tracking-widest transition-all rounded-xl border border-stone-200 cursor-pointer flex items-center justify-center gap-3 shadow-xs"
             >
