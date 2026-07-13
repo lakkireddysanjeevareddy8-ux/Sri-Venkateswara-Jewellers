@@ -13,19 +13,27 @@ export const PasswordGate: React.FC<PasswordGateProps> = ({ settings, onSuccess,
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState('');
 
-  const handleSubmit = (e: React.FormEvent) => {
+  const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     
-    // Get the configured password from database, defaulting to "Sanju@1234"
-    const activePassword = settings.admin_password || 'Sanju@1234';
-
-    // Get the master bypass key from environment or default to "Sanju@1234"
-    const masterBypass = (import.meta as any).env?.VITE_MASTER_BYPASS_KEY || 'Sanju@1234';
-
-    if (password === activePassword || password === masterBypass) {
-      onSuccess();
-    } else {
-      setError('Invalid passkey. Access to the luxury admin panel remains securely sealed.');
+    try {
+      const response = await fetch('/api/admin/login', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ passkey: password })
+      });
+      
+      const data = await response.json();
+      
+      if (response.ok && data.success) {
+        localStorage.setItem('svj_admin_token', data.token);
+        localStorage.setItem('svj_admin_authenticated', 'true'); // Keeping this for backward compatibility in UI state checks
+        onSuccess();
+      } else {
+        setError(data.error || 'Invalid passkey. Access to the luxury admin panel remains securely sealed.');
+      }
+    } catch (err) {
+      setError('Connection to security vault failed. Please try again.');
     }
   };
 

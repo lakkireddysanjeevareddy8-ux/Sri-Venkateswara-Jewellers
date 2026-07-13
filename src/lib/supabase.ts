@@ -577,11 +577,22 @@ export const syncWithServer = async (isStartup = false): Promise<void> => {
           payload[key] = JSON.parse(val);
         }
       });
-      await fetch('/api/db', {
+      const token = localStorage.getItem('svj_admin_token');
+      const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+      if (token) {
+        headers['Authorization'] = `Bearer ${token}`;
+      }
+      
+      const pushRes = await fetch('/api/db', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers,
         body: JSON.stringify(payload)
       });
+      
+      if (pushRes.status === 401) {
+        localStorage.removeItem('svj_admin_token');
+        localStorage.removeItem('svj_admin_authenticated');
+      }
     }
   } catch (error) {
     console.error('Failed to sync with server:', error);
@@ -610,13 +621,24 @@ export const pushLocalStateToServer = async (overrides?: Record<string, any>): P
         }
       }
     });
+    const token = localStorage.getItem('svj_admin_token');
+    const headers: Record<string, string> = { 'Content-Type': 'application/json' };
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
+
     const res = await fetch('/api/db', {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers,
       body: JSON.stringify(payload)
     });
     if (!res.ok) {
       console.error('Failed to push state to server. Status:', res.status);
+      if (res.status === 401) {
+        localStorage.removeItem('svj_admin_token');
+        localStorage.removeItem('svj_admin_authenticated');
+        // Optionally dispatch event to UI to log out
+      }
     }
   } catch (error) {
     console.error('Failed to push state to server:', error);
