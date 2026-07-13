@@ -105,6 +105,15 @@ export default function App() {
   // Listen for browser back/forward navigation buttons
   useEffect(() => {
     const handlePopState = (e: PopStateEvent) => {
+      // Close all overlay modals when back button is pressed
+      setIsPasswordGateOpen(false);
+      setIsAdminPanelOpen(false);
+      setIsProfileOpen(false);
+      setShowAuthModal(false);
+      setIsWishlistOpen(false);
+      setIsLogoModalOpen(false);
+      setShowConnectionGuide(false);
+
       if (e.state?.productId && products.length > 0) {
         const found = products.find((p) => p.id === e.state.productId);
         if (found) {
@@ -214,6 +223,7 @@ export default function App() {
 
   const toggleWishlist = async (productId: string) => {
     if (!activeProfile) {
+      window.history.pushState({ modal: 'authModal' }, '', window.location.pathname);
       setShowAuthModal(true);
       return;
     }
@@ -725,7 +735,10 @@ export default function App() {
       >
         <div className="flex items-center gap-3">
           <button
-            onClick={() => setIsLogoModalOpen(true)}
+            onClick={() => {
+              window.history.pushState({ modal: 'logo' }, '', window.location.pathname);
+              setIsLogoModalOpen(true);
+            }}
             className="group relative focus:outline-hidden cursor-pointer transition-transform duration-300 hover:scale-110 active:scale-95"
             title="Click to view logo clearly"
           >
@@ -752,6 +765,7 @@ export default function App() {
           ].includes(activeProfile.email.toLowerCase()) && (
             <button
               onClick={() => {
+                window.history.pushState({ modal: 'admin' }, '', window.location.pathname);
                 if (localStorage.getItem('svj_admin_authenticated') === 'true') {
                   setIsAdminPanelOpen(true);
                 } else {
@@ -767,6 +781,7 @@ export default function App() {
 
           <button
             onClick={() => {
+              window.history.pushState({ modal: 'wishlistAuth' }, '', window.location.pathname);
               if (!activeProfile) {
                 setShowAuthModal(true);
               } else {
@@ -785,7 +800,10 @@ export default function App() {
           </button>
 
           <button
-            onClick={() => setIsProfileOpen(true)}
+            onClick={() => {
+              window.history.pushState({ modal: 'profile' }, '', window.location.pathname);
+              setIsProfileOpen(true);
+            }}
             className="border border-[#D4AF37]/40 bg-[#1A1A1A]/40 text-stone-250 hover:bg-[#D4AF37]/15 p-2 rounded-full transition-all flex items-center justify-center cursor-pointer shadow-sm hover:scale-105 duration-200"
             title={activeProfile ? `Client Account: ${activeProfile.username}` : "Guest Sign In / Client Account"}
           >
@@ -1313,7 +1331,10 @@ export default function App() {
           wishlist={wishlist}
           onToggleFavorite={toggleWishlist}
           activeProfile={activeProfile}
-          onRequireAuth={() => setShowAuthModal(true)}
+          onRequireAuth={() => {
+            window.history.pushState({ modal: 'authModal' }, '', window.location.pathname);
+            setShowAuthModal(true);
+          }}
         />
       )}
 
@@ -1342,6 +1363,7 @@ export default function App() {
 
           onClose={() => setIsProfileOpen(false)}
           onOpenAdmin={() => {
+            window.history.pushState({ modal: 'admin' }, '', window.location.pathname);
             if (localStorage.getItem('svj_admin_authenticated') === 'true') {
               setIsAdminPanelOpen(true);
             } else {
