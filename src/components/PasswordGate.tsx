@@ -32,8 +32,9 @@ export const PasswordGate: React.FC<PasswordGateProps> = ({ settings, onSuccess,
       } else {
         setError(data.error || 'Invalid passkey. Access to the luxury admin panel remains securely sealed.');
       }
-    } catch (err) {
-      setError('Connection to security vault failed. Please try again.');
+    } catch (err: any) {
+      console.error('Login error:', err);
+      setError(`Connection to security vault failed: ${err?.message || String(err)}`);
     }
   };
 
