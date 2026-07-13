@@ -23,9 +23,18 @@ export const PasswordGate: React.FC<PasswordGateProps> = ({ settings, onSuccess,
         body: JSON.stringify({ passkey: password })
       });
       
-      const data = await response.json();
+      const rawText = await response.text();
+      console.log('Server response status:', response.status);
+      console.log('Server raw response text:', rawText);
       
-      if (response.ok && data.success) {
+      let data;
+      try {
+        data = JSON.parse(rawText);
+      } catch (parseErr) {
+        throw new Error(`Server returned non-JSON. Status: ${response.status}. Body: "${rawText}"`);
+      }
+      
+      if (response.ok && data && data.success) {
         localStorage.setItem('svj_admin_token', data.token);
         localStorage.setItem('svj_admin_authenticated', 'true'); // Keeping this for backward compatibility in UI state checks
         onSuccess();
