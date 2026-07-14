@@ -1,0 +1,518 @@
+{
+  "initialized": true,
+  "svj_settings": {
+    "shop_name": "Sri Venkateswara Jewellers",
+    "logo_url": "/logo.jpg",
+    "gold_22k_rate": 13294,
+    "gold_24k_rate": 14450,
+    "silver_normal_rate": 220,
+    "silver_999_rate": 558,
+    "dynamic_theme": {
+      "primary": "#936C31",
+      "secondary": "#1A1A1A",
+      "headerBg": "#1A1A1A",
+      "headerText": "#FCFAF7",
+      "bg": "#FCFAF7",
+      "cardBg": "#ffffff",
+      "text": "#1A1A1A",
+      "accent": "#D4AF37"
+    },
+    "admin_password": "Sanju@1234",
+    "gstin": "37AAAAA1111A1Z1",
+    "address": "Ammavarisala St, Sainagar, Rajampet, Andhra Pradesh 516115",
+    "shop_phone": "+919876543210",
+    "ad_active": true,
+    "ad_media_type": "image",
+    "ad_media_url": "https://images.unsplash.com/photo-1601121141461-9d6647bca1ed?q=80&w=800&auto=format&fit=crop",
+    "ad_title": "Unveiling: The Royal Nizam Antique Kundan Haram",
+    "ad_text": "Introducing our newly added 22K Royal Nizam Antique Kundan Haram. Handcrafted with traditional precision and authentic BIS Hallmarking. Explore the master craftsmanship now!",
+    "ad_product_id": "prod-1",
+    "shop_name_font": "serif",
+    "shop_name_italic": true,
+    "shop_name_bold": false,
+    "shop_name_spacing": "tight",
+    "flat_offer_active": false,
+    "flat_offer_canceled_gold_22k": 13800,
+    "flat_offer_exclusive_gold_22k": 13200,
+    "flat_offer_canceled_gold_24k": 15000,
+    "flat_offer_exclusive_gold_24k": 14400,
+    "flat_offer_canceled_silver_999": 600,
+    "flat_offer_exclusive_silver_999": 550,
+    "flat_offer_canceled_silver_normal": 250,
+    "flat_offer_exclusive_silver_normal": 210,
+    "flat_offer_discount_amount": 1000
+  },
+  "svj_products": [
+    {
+      "id": "prod-1",
+      "name": "Royal Nizam Antique Kundan Haram",
+      "SKU": "SVJ-KND-HRM-001",
+      "main_category": "Gold",
+      "purity_type": "22K Gold",
+      "gender_tag": "Women",
+      "product_type": "Chains",
+      "weight_grams": 48.5,
+      "making_charge_percent": 12.5,
+      "image_urls": [
+        "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=600&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=600&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=600&auto=format&fit=crop"
+      ],
+      "is_in_stock": true,
+      "stock_quantity": 2,
+      "has_stone": true,
+      "metal_weight_grams": 45.5,
+      "stone_weight_grams": 3,
+      "stone_price": 25000
+    },
+    {
+      "id": "prod-2",
+      "name": "South Indian Lakshmi Temple Kasu Mala",
+      "SKU": "SVJ-TMP-MAL-002",
+      "main_category": "Gold",
+      "purity_type": "22K Gold",
+      "gender_tag": "Women",
+      "product_type": "Chains",
+      "weight_grams": 36.2,
+      "making_charge_percent": 10,
+      "image_urls": [
+        "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=600&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=600&auto=format&fit=crop"
+      ],
+      "is_in_stock": true,
+      "stock_quantity": 8
+    },
+    {
+      "id": "prod-3",
+      "name": "Ganga Jamuna Gold Filigree Bangles",
+      "SKU": "SVJ-GMB-BGL-003",
+      "main_category": "Gold",
+      "purity_type": "22K Gold",
+      "gender_tag": "Women",
+      "product_type": "Bangles",
+      "weight_grams": 28,
+      "making_charge_percent": 8.5,
+      "image_urls": [
+        "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=600&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=600&auto=format&fit=crop"
+      ],
+      "is_in_stock": true,
+      "stock_quantity": 1
+    },
+    {
+      "id": "prod-4",
+      "name": "Classic Men's 24K Sovereign Crest Ring",
+      "SKU": "SVJ-SVR-RNG-004",
+      "main_category": "Gold",
+      "purity_type": "24K Gold",
+      "gender_tag": "Men",
+      "product_type": "Rings",
+      "weight_grams": 11.5,
+      "making_charge_percent": 6,
+      "image_urls": [
+        "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?q=80&w=600&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=600&auto=format&fit=crop"
+      ],
+      "is_in_stock": true,
+      "stock_quantity": 5
+    },
+    {
+      "id": "prod-5",
+      "name": "Ornate Nakshi Silver Kada",
+      "SKU": "SVJ-SLV-KDA-005",
+      "main_category": "Silver",
+      "purity_type": "Silver 92.5 Purity",
+      "gender_tag": "Unisex",
+      "product_type": "Bangles",
+      "weight_grams": 52,
+      "making_charge_percent": 14,
+      "image_urls": [
+        "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?q=80&w=600&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=600&auto=format&fit=crop"
+      ],
+      "is_in_stock": true,
+      "stock_quantity": 12
+    },
+    {
+      "id": "prod-6",
+      "name": "Filigree Silver Chandelier Jhumkas",
+      "SKU": "SVJ-SLV-JHM-006",
+      "main_category": "Silver",
+      "purity_type": "Normal Silver",
+      "gender_tag": "Women",
+      "product_type": "Earrings",
+      "weight_grams": 22.4,
+      "making_charge_percent": 11,
+      "image_urls": [
+        "https://images.unsplash.com/photo-1630019852942-f89202989a59?q=80&w=600&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?q=80&w=600&auto=format&fit=crop"
+      ],
+      "is_in_stock": true,
+      "stock_quantity": 2
+    },
+    {
+      "id": "prod-7",
+      "name": "Sleek Italian Silver Link Bracelet",
+      "SKU": "SVJ-SLV-BRC-007",
+      "main_category": "Silver",
+      "purity_type": "Normal Silver",
+      "gender_tag": "Men",
+      "product_type": "Chains",
+      "weight_grams": 35,
+      "making_charge_percent": 8,
+      "image_urls": [
+        "https://images.unsplash.com/photo-1602751584552-8ba73aad10e1?q=80&w=600&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=600&auto=format&fit=crop"
+      ],
+      "is_in_stock": false,
+      "stock_quantity": 0
+    },
+    {
+      "id": "prod-8",
+      "name": "Imperial Solitaire 92.5 Silver Ring",
+      "SKU": "SVJ-SLV-RNG-925",
+      "main_category": "Silver",
+      "purity_type": "Silver 92.5 Purity",
+      "gender_tag": "Women",
+      "product_type": "Rings",
+      "weight_grams": 5.5,
+      "making_charge_percent": 10,
+      "image_urls": [
+        "https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=600&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?q=80&w=600&auto=format&fit=crop"
+      ],
+      "is_in_stock": true,
+      "stock_quantity": 15
+    },
+    {
+      "id": "prod-9",
+      "name": "Traditional 22K Gold Antique Jhumkas",
+      "SKU": "SVJ-GLD-EAR-009",
+      "main_category": "Gold",
+      "purity_type": "22K Gold",
+      "gender_tag": "Women",
+      "product_type": "Earrings",
+      "weight_grams": 14.5,
+      "making_charge_percent": 11,
+      "image_urls": [
+        "https://images.unsplash.com/photo-1630019852942-f89202989a59?q=80&w=600&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?q=80&w=600&auto=format&fit=crop"
+      ],
+      "is_in_stock": true,
+      "stock_quantity": 4
+    },
+    {
+      "id": "prod-10",
+      "name": "Sovereign 22K Gold Waist Belt (Vaddanam)",
+      "SKU": "SVJ-GLD-OTH-010",
+      "main_category": "Gold",
+      "purity_type": "22K Gold",
+      "gender_tag": "Women",
+      "product_type": "Others",
+      "weight_grams": 85,
+      "making_charge_percent": 13.5,
+      "image_urls": [
+        "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=600&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1200&auto=format&fit=crop"
+      ],
+      "is_in_stock": true,
+      "stock_quantity": 1
+    },
+    {
+      "id": "prod-11",
+      "name": "Elegant 22K Gold Peacock Ring",
+      "SKU": "SVJ-GLD-RNG-011",
+      "main_category": "Gold",
+      "purity_type": "22K Gold",
+      "gender_tag": "Women",
+      "product_type": "RNG-011",
+      "weight_grams": 8.2,
+      "making_charge_percent": 9,
+      "image_urls": [
+        "https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=600&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1603561591411-07134e71a2a9?q=80&w=600&auto=format&fit=crop"
+      ],
+      "is_in_stock": true,
+      "stock_quantity": 6
+    },
+    {
+      "id": "prod-12",
+      "name": "Sleek 22K Gold Rope Chain",
+      "SKU": "SVJ-GLD-CHN-012",
+      "main_category": "Gold",
+      "purity_type": "22K Gold",
+      "gender_tag": "Unisex",
+      "product_type": "Chains",
+      "weight_grams": 18.5,
+      "making_charge_percent": 7.5,
+      "image_urls": [
+        "https://images.unsplash.com/photo-1599643478518-a784e5dc4c8f?q=80&w=600&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=600&auto=format&fit=crop"
+      ],
+      "is_in_stock": true,
+      "stock_quantity": 10
+    },
+    {
+      "id": "prod-13",
+      "name": "Classic 22K Gold Temple Kangan",
+      "SKU": "SVJ-GLD-BGL-013",
+      "main_category": "Gold",
+      "purity_type": "22K Gold",
+      "gender_tag": "Women",
+      "product_type": "Bangles",
+      "weight_grams": 32,
+      "making_charge_percent": 9.5,
+      "image_urls": [
+        "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=600&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1611591437281-460bfbe1220a?q=80&w=600&auto=format&fit=crop"
+      ],
+      "is_in_stock": true,
+      "stock_quantity": 3
+    },
+    {
+      "id": "prod-14",
+      "name": "92.5 Sterling Silver Figaro Chain",
+      "SKU": "SVJ-S92-CHN-014",
+      "main_category": "Silver",
+      "purity_type": "Silver 92.5 Purity",
+      "gender_tag": "Men",
+      "product_type": "Chains",
+      "weight_grams": 12,
+      "making_charge_percent": 8,
+      "image_urls": [
+        "https://images.unsplash.com/photo-1602751584552-8ba73aad10e1?q=80&w=600&auto=format&fit=crop"
+      ],
+      "is_in_stock": true,
+      "stock_quantity": 25
+    },
+    {
+      "id": "prod-15",
+      "name": "92.5 Silver Designer Cuff Bangle",
+      "SKU": "SVJ-S92-BGL-015",
+      "main_category": "Silver",
+      "purity_type": "Silver 92.5 Purity",
+      "gender_tag": "Women",
+      "product_type": "Bangles",
+      "weight_grams": 24.5,
+      "making_charge_percent": 10,
+      "image_urls": [
+        "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?q=80&w=600&auto=format&fit=crop",
+        "https://images.unsplash.com/photo-1535632066927-ab7c9ab60908?q=80&w=600&auto=format&fit=crop"
+      ],
+      "is_in_stock": true,
+      "stock_quantity": 12
+    },
+    {
+      "id": "prod-16",
+      "name": "92.5 Silver Floral Stud Earrings",
+      "SKU": "SVJ-S92-EAR-016",
+      "main_category": "Silver",
+      "purity_type": "Silver 92.5 Purity",
+      "gender_tag": "Women",
+      "product_type": "Earrings",
+      "weight_grams": 6.8,
+      "making_charge_percent": 12,
+      "image_urls": [
+        "https://images.unsplash.com/photo-1630019852942-f89202989a59?q=80&w=600&auto=format&fit=crop"
+      ],
+      "is_in_stock": true,
+      "stock_quantity": 30
+    },
+    {
+      "id": "prod-17",
+      "name": "92.5 Silver Antique Anklets (Payal)",
+      "SKU": "SVJ-S92-OTH-017",
+      "main_category": "Silver",
+      "purity_type": "Silver 92.5 Purity",
+      "gender_tag": "Women",
+      "product_type": "Others",
+      "weight_grams": 38,
+      "making_charge_percent": 9,
+      "image_urls": [
+        "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1200&auto=format&fit=crop"
+      ],
+      "is_in_stock": true,
+      "stock_quantity": 14
+    },
+    {
+      "id": "prod-18",
+      "name": "Aura Fine Silver Band Ring",
+      "SKU": "SVJ-S99-RNG-018",
+      "main_category": "Silver",
+      "purity_type": "Silver 92.5 Purity",
+      "gender_tag": "Unisex",
+      "product_type": "Rings",
+      "weight_grams": 7.2,
+      "making_charge_percent": 7,
+      "image_urls": [
+        "https://images.unsplash.com/photo-1605100804763-247f67b3557e?q=80&w=600&auto=format&fit=crop"
+      ],
+      "is_in_stock": true,
+      "stock_quantity": 18
+    },
+    {
+      "id": "prod-19",
+      "name": "Pure Silver Chased Kada",
+      "SKU": "SVJ-S99-BGL-019",
+      "main_category": "Silver",
+      "purity_type": "Silver 92.5 Purity",
+      "gender_tag": "Men",
+      "product_type": "Bangles",
+      "weight_grams": 48,
+      "making_charge_percent": 10,
+      "image_urls": [
+        "https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?q=80&w=600&auto=format&fit=crop"
+      ],
+      "is_in_stock": true,
+      "stock_quantity": 5
+    },
+    {
+      "id": "prod-20",
+      "name": "Classic Silver Snake Chain",
+      "SKU": "SVJ-SLV-CHN-020",
+      "main_category": "Silver",
+      "purity_type": "Normal Silver",
+      "gender_tag": "Unisex",
+      "product_type": "Chains",
+      "weight_grams": 22,
+      "making_charge_percent": 6.5,
+      "image_urls": [
+        "https://images.unsplash.com/photo-1602751584552-8ba73aad10e1?q=80&w=600&auto=format&fit=crop"
+      ],
+      "is_in_stock": true,
+      "stock_quantity": 20
+    },
+    {
+      "id": "prod-21",
+      "name": "Standard Silver Hoop Earrings",
+      "SKU": "SVJ-SLV-EAR-021",
+      "main_category": "Silver",
+      "purity_type": "Normal Silver",
+      "gender_tag": "Women",
+      "product_type": "Earrings",
+      "weight_grams": 10.5,
+      "making_charge_percent": 8.5,
+      "image_urls": [
+        "https://images.unsplash.com/photo-1630019852942-f89202989a59?q=80&w=600&auto=format&fit=crop"
+      ],
+      "is_in_stock": true,
+      "stock_quantity": 15
+    },
+    {
+      "id": "prod-22",
+      "name": "Divine Pure Silver Pooja Plate",
+      "SKU": "SVJ-S99-OTH-022",
+      "main_category": "Silver",
+      "purity_type": "Silver 92.5 Purity",
+      "gender_tag": "Unisex",
+      "product_type": "Others",
+      "weight_grams": 150,
+      "making_charge_percent": 15,
+      "image_urls": [
+        "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=600&auto=format&fit=crop"
+      ],
+      "is_in_stock": true,
+      "stock_quantity": 4
+    }
+  ],
+  "svj_whatsapp_numbers": [
+    {
+      "id": "wa-1",
+      "phone_number": "+919876543210",
+      "reference_name": "Main Golden Showroom Desk"
+    },
+    {
+      "id": "wa-2",
+      "phone_number": "+918765432109",
+      "reference_name": "Sanjeeva Reddy (Senior Valuer)"
+    }
+  ],
+  "svj_promotions": {
+    "offer_name": "Sankranthi Gold Fest & Shubh Vivah Muhurtham Special",
+    "detailed_description": "Celebrate the holy wedding season with exclusive rate locks and a flat 4.5% making charges on premium Kundan Harams, Temple Bangles, and Ornate Waistbands. Pre-book your rate now to secure against price volatility!",
+    "ends_at": "2026-07-13T11:05:30.816Z",
+    "banner_image_url": "https://images.unsplash.com/photo-1515562141207-7a88fb7ce338?q=80&w=1200&auto=format&fit=crop",
+    "banner_bg_color": "#7c2d12",
+    "is_active": true
+  },
+  "svj_reviews": [
+    {
+      "id": "rev-1",
+      "product_id": "prod-1",
+      "user_id": "guest-1",
+      "user_name": "Ananya Rao",
+      "rating_stars": 5,
+      "review_text": "Absolutely stunning work of art. The antique finish on the Kundan Stones is spectacular. Reached out via WhatsApp and they sent me additional pictures instantly!",
+      "created_at": "2026-06-20T10:00:00.000Z"
+    },
+    {
+      "id": "rev-2",
+      "product_id": "prod-1",
+      "user_id": "guest-2",
+      "user_name": "Lakshmi Prasanna",
+      "rating_stars": 4,
+      "review_text": "Classic design, weight matches exactly as listed. Making charges are extremely transparent.",
+      "created_at": "2026-06-25T14:30:00.000Z"
+    },
+    {
+      "id": "rev-3",
+      "product_id": "prod-4",
+      "user_id": "guest-3",
+      "user_name": "Kalyan Kumar",
+      "rating_stars": 5,
+      "review_text": "Genuine 24K gold ring, heavy and premium. Truly satisfactory custom sizing desk!",
+      "created_at": "2026-06-24T18:00:00.000Z"
+    }
+  ],
+  "svj_profiles": [
+    {
+      "id": "p-1",
+      "username": "Sanjeeva Reddy",
+      "email": "lakkireddysanjeevareddy8@gmail.com",
+      "phone_number": "+91 9701635098",
+      "shipping_address": "Ammavarisala St, Sainagar, Rajampet, Andhra Pradesh 516115",
+      "favorite_product_ids": [
+        "prod-106",
+        "prod-102",
+        "prod-105",
+        "ef6d9a54-b5f8-47ad-8778-f8cea9e4e21d",
+        "4nhfeh44i2x"
+      ]
+    },
+    {
+      "id": "p-google-1783508899866",
+      "username": "Google User",
+      "email": "google.user@gmail.com",
+      "phone_number": "+91 99008 87766"
+    }
+  ],
+  "svj_stock_notifications": [
+    {
+      "id": "notif-1783764179676-770",
+      "product_id": "prod-101",
+      "email": "lakkireddysanjeevareddy8@gmail.com",
+      "created_at": "2026-07-11T10:03:01.202587+00:00",
+      "is_notified": true,
+      "notified_at": "2026-07-11T10:03:22.833Z"
+    }
+  ],
+  "svj_email_logs": [
+    {
+      "id": "email-1783764203140-6102",
+      "recipient_email": "lakkireddysanjeevareddy8@gmail.com",
+      "subject": "✨ Back in Stock: Antique Lakshmi Kasu Haram is Restocked at Sri Venkateswara Jewellers!",
+      "body": "Dear Customer,\n\nGreat news! The jewelry piece you requested a back-in-stock notification for is now available again at Sri Venkateswara Jewellers.\n\nBelow are the complete authentic product specifications, pricing estimates, and live inventory levels for your review.\n\n========================================================================\n🌟 RESTOCKED PRODUCT DOSSIER & SPECIFICATIONS 🌟\n========================================================================\n\n💎 PRODUCT IDENTIFICATION & CATEGORY:\n------------------------------------------------------------------------\n• Item Name:       Antique Lakshmi Kasu Haram\n• SKU Identifier:  SVJ-001\n• Main Category:   Gold (Necklaces & Chains)\n• Target Segment:  Women Wear\n\n📐 MATERIAL METRICS & PURITY:\n------------------------------------------------------------------------\n• Purity Standard: 22K Gold (BIS Hallmark Standard Certified)\n• Net Weight:      45.50 grams\n• Making Charges:  14.5% of gold/silver metal value\n\n💰 LIVE SPOT PRICING ESTIMATE (Based on Daily Rate Settings):\n------------------------------------------------------------------------\n• Live Metal Rate: ₹13294/gram\n• Estimated Value: ₹6,92,584 (Metal weight value + making charges)\n  *Note: Gold & silver spot rates fluctuate on daily intervals. The billing total will reflect the exact official rates at invoice checkout.*\n\n📦 LIVE STOCK & INVENTORY DETAILS:\n------------------------------------------------------------------------\n• CURRENT STOCK STATUS: [ IN STOCK - READY TO DISPATCH ]\n• TOTAL STOCK QUANTITY: 5 item(s) available in display vault\n  *Disclaimer: Exquisite signature jewelry pieces sell out fast. We highly advise contacting our desk immediately to book or secure this piece.*\n\n🖼️ PRODUCT VISUALS & GALLERY:\n------------------------------------------------------------------------\n• Digital Catalog Image: https://images.unsplash.com/photo-1599643478514-4a410f061f00?q=80&w=800&auto=format&fit=crop\n\n\n========================================================================\n🛍️ HOW TO PURCHASE & CONTACT OPTIONS:\n========================================================================\n1. WhatsApp Priority Desk: Open your digital catalog in Sri Venkateswara Jewellers, tap on WhatsApp to chat with our staff, and refer to SKU SVJ-001 for prompt reservation.\n2. Store Visit: Walk into Sri Venkateswara Jewellers with this email code to check weight certifications or handle booking.\n\nThank you for choosing us to decorate your auspicious moments!\n\nBest regards,\nCustomer Experience Desk\nSri Venkateswara Jewellers\nGSTIN Number: 37AAAAA1111A1Z1",
+      "sent_at": "2026-07-11T10:03:22.833Z",
+      "product_id": "prod-101"
+    }
+  ],
+  "svj_passwords": {
+    "lakkireddysanjeevareddy8@gmail.com": "password123",
+    "sanjeev.lakkireddy@gmail.com": "sanjeev123",
+    "guest.jewellery@gmail.com": "guest123",
+    "google.user@gmail.com": "google-simulated-password"
+  },
+  "svj_user_wishlists": {
+    "lakkireddysanjeevareddy8@gmail.com": []
+  }
+}

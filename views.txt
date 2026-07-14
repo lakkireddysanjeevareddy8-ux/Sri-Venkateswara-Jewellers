@@ -1,0 +1,658 @@
+﻿Created At: 2026-07-10T10:29:07Z
+Completed At: 2026-07-10T10:29:08Z
+File Path: `file:///c:/Users/Sanjeeva%20Reddy/Downloads/Sree-Venkateswara-Jewellers-main/frontend/src/components/ProfileDrawer.tsx`
+Total Lines: 524
+Total Bytes: 22440
+Showing lines 150 to 200
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+150: 
+151:       setLoginEmail('');
+152:       setLoginPassword('');
+153:       setRegName('');
+154:       setRegPhone('');
+155:       setRegAddress('');
+156:       if (onProfileUpdated) {
+157:         onProfileUpdated();
+158:       }
+159:     } catch (err) {
+160:       console.error(err);
+161:       setLoginError('Connection failure. Please try again.');
+162:     } finally {
+163:       setIsLoggingIn(false);
+164:     }
+165:   };
+166: 
+167:   const handleSave = async (e: React.FormEvent) => {
+168:     e.preventDefault();
+169:     if (!activeProfile) return;
+170:     
+171:     setIsSaving(true);
+172:     try {
+173:       await updateProfile(profile);
+174:       setSaveSuccess(true);
+175:       if (onProfileUpdated) {
+176:         onProfileUpdated(profile);
+177:       }
+178:       setTimeout(() => setSaveSuccess(false), 3000);
+179:     } catch (err) {
+180:       alert('Error saving profile changes.');
+181:     } finally {
+182:       setIsSaving(false);
+183:     }
+184:   };
+185: 
+186:   const primaryColor = settings.dynamic_theme.primary;
+187:   const secondaryColor = settings.dynamic_theme.secondary;
+188: 
+189:   return (
+190:     <div className="fixed inset-y-0 right-0 z-50 w-full max-w-md bg-stone-50 shadow-2xl border-l border-stone-200 flex flex-col justify-between overflow-hidden">
+191:       {/* Drawer Header */}
+192:       <div className="p-6 border-b border-stone-200 flex items-center justify-between bg-white shrink-0">
+193:         <div className="flex items-center gap-3">
+194:           <div
+195:             className="rounded-full p-2 text-white"
+196:             style={{ backgroundColor: primaryColor }}
+197:           >
+198:             <User className="h-5 w-5" />
+199:           </div>
+200:           <div>
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+
+Created At: 2026-07-10T10:29:35Z
+Completed At: 2026-07-10T10:29:35Z
+File Path: `file:///c:/Users/Sanjeeva%20Reddy/Downloads/Sree-Venkateswara-Jewellers-main/frontend/src/components/ProfileDrawer.tsx`
+Total Lines: 524
+Total Bytes: 22440
+Showing lines 1 to 20
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+1: import React, { useState, useEffect } from 'react';
+2: import { Profile, StoreSettings, Product } from '../types';
+3: import { X, User, Mail, Phone, CheckCircle, Save, ShieldAlert, Heart, Trash2, Globe, MapPin, Sparkles, LogIn, LogOut, ArrowRight, Lock } from 'lucide-react';
+4: import { getProfiles, updateProfile } from '../lib/supabase';
+5: import { getRateForPurity, calculateJewelryPrice, getExclusiveOfferRateForPurity } from './ProductCard';
+6: import { CurrencyCode, CURRENCIES, convertAndFormatPrice } from '../lib/currency';
+7: 
+8: interface ProfileDrawerProps {
+9:   settings: StoreSettings;
+10:   activeProfile: Profile | null;
+11:   onLogin: (profile: Profile) => void;
+12:   onLogout: () => void;
+13:   onClose: () => void;
+14:   onOpenAdmin: () => void;
+15:   onProfileUpdated?: (profile?: Profile) => void;
+16:   selectedCurrency: CurrencyCode;
+17:   onCurrencyChange: (currency: CurrencyCode) => void;
+18: }
+19: 
+20: export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ 
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+
+Created At: 2026-07-10T10:30:29Z
+Completed At: 2026-07-10T10:30:30Z
+File Path: `file:///c:/Users/Sanjeeva%20Reddy/Downloads/Sree-Venkateswara-Jewellers-main/frontend/src/components/ProfileDrawer.tsx`
+Total Lines: 524
+Total Bytes: 22440
+Showing lines 380 to 450
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+380:               <span>Profile successfully written and updated on Supabase servers!</span>
+381:             </div>
+382:           )}
+383: 
+384:           <div className="space-y-4">
+385:             <div>
+386:               <label className="block text-xs font-bold text-stone-500 uppercase font-mono tracking-wider">
+387:                 Username
+388:               </label>
+389:               <div className="relative mt-1">
+390:                 <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400">
+391:                   <User className="h-4 w-4" />
+392:                 </span>
+393:                 <input
+394:                   type="text"
+395:                   value={profile.username}
+396:                   onChange={(e) => setProfile({ ...profile, username: e.target.value })}
+397:                   className="w-full rounded-lg border border-stone-300 bg-white pl-9 pr-3 py-2.5 text-xs font-serif font-bold focus:border-stone-500 focus:outline-hidden"
+398:                   placeholder="Enter display name"
+399:                   required
+400:                 />
+401:               </div>
+402:             </div>
+403: 
+404:             <div>
+405:               <label className="block text-xs font-bold text-stone-500 uppercase font-mono tracking-wider">
+406:                 Email Address
+407:               </label>
+408:               <div className="relative mt-1">
+409:                 <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400"
+<truncated 253 bytes>
+ className="w-full rounded-lg border border-stone-200 bg-stone-50 pl-9 pr-3 py-2.5 text-xs font-mono text-stone-500 cursor-not-allowed focus:outline-hidden"
+417:                   placeholder="Verify registered email"
+418:                   required
+419:                 />
+420:               </div>
+421:               <p className="text-[10px] text-stone-400 font-mono tracking-wide mt-1.5 uppercase">
+422:                 Registered Customer Email
+423:               </p>
+424:             </div>
+425: 
+426:             <div>
+427:               <label className="block text-xs font-bold text-stone-500 uppercase font-mono tracking-wider">
+428:                 Phone Number (for WhatsApp enquiries)
+429:               </label>
+430:               <div className="relative mt-1">
+431:                 <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400">
+432:                   <Phone className="h-4 w-4" />
+433:                 </span>
+434:                 <input
+435:                   type="text"
+436:                   value={profile.phone_number}
+437:                   onChange={(e) => setProfile({ ...profile, phone_number: e.target.value })}
+438:                   className="w-full rounded-lg border border-stone-300 bg-white pl-9 pr-3 py-2.5 text-xs focus:border-stone-500 focus:outline-hidden"
+439:                   placeholder="+91 99008 87766"
+440:                   required
+441:                 />
+442:               </div>
+443:             </div>
+444: 
+445:             <div>
+446:               <label className="block text-xs font-bold text-stone-500 uppercase font-mono tracking-wider">
+447:                 Shipping Address
+448:               </label>
+449:               <div className="relative mt-1">
+450:                 <span className="absolute top-3 left-3 text-stone-400">
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+
+Created At: 2026-07-10T10:31:16Z
+Completed At: 2026-07-10T10:31:16Z
+File Path: `file:///c:/Users/Sanjeeva%20Reddy/Downloads/Sree-Venkateswara-Jewellers-main/frontend/src/components/ProfileDrawer.tsx`
+Total Lines: 524
+Total Bytes: 22440
+Showing lines 20 to 60
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+20: export const ProfileDrawer: React.FC<ProfileDrawerProps> = ({ 
+21:   settings, 
+22:   activeProfile,
+23:   onLogin,
+24:   onLogout,
+25:   onClose,
+26:   onOpenAdmin,
+27:   onProfileUpdated,
+28:   selectedCurrency,
+29:   onCurrencyChange
+30: }) => {
+31:   // Form Draft Profile State
+32:   const [profile, setProfile] = useState<Profile>({
+33:     id: '',
+34:     username: '',
+35:     email: '',
+36:     phone_number: '',
+37:     shipping_address: ''
+38:   });
+39:   
+40:   const [isSaving, setIsSaving] = useState(false);
+41:   const [saveSuccess, setSaveSuccess] = useState(false);
+42: 
+43:   // Standard Login / Signup Form States
+44:   const [loginEmail, setLoginEmail] = useState('');
+45:   const [loginPassword, setLoginPassword] = useState('');
+46:   const [loginTab, setLoginTab] = useState<'signin' | 'signup'>('signin');
+47:   const [regName, setRegName] = useState('');
+48:   const [regPhone, setRegPhone] = useState('');
+49:   const [regAddress, setRegAddress] = useState('');
+50:   const [isLoggingIn, setIsLoggingIn] = useState(false);
+51:   const [loginError, setLoginError] = useState<string | null>(null);
+52: 
+53:   // Auto-sync form state to activeProfile prop
+54:   useEffect(() => {
+55:     if (activeProfile) {
+56:       setProfile(activeProfile);
+57:     }
+58:   }, [activeProfile]);
+59: 
+60:   // Helper: Retrieve passwords map
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+
+Created At: 2026-07-10T10:53:24Z
+Completed At: 2026-07-10T10:53:24Z
+File Path: `file:///c:/Users/Sanjeeva%20Reddy/Downloads/Sree-Venkateswara-Jewellers-main/frontend/src/components/ProfileDrawer.tsx`
+Total Lines: 524
+Total Bytes: 22440
+Showing lines 30 to 45
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+30: }) => {
+31:   // Form Draft Profile State
+32:   const [profile, setProfile] = useState<Profile>({
+33:     id: '',
+34:     username: '',
+35:     email: '',
+36:     phone_number: '',
+37:     shipping_address: ''
+38:   });
+39:   
+40:   const [isSaving, setIsSaving] = useState(false);
+41:   const [saveSuccess, setSaveSuccess] = useState(false);
+42: 
+43:   // Standard Login / Signup Form States
+44:   const [loginEmail, setLoginEmail] = useState('');
+45:   const [loginPassword, setLoginPassword] = useState('');
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+
+Created At: 2026-07-10T10:56:05Z
+Completed At: 2026-07-10T10:56:06Z
+File Path: `file:///c:/Users/Sanjeeva%20Reddy/Downloads/Sree-Venkateswara-Jewellers-main/frontend/src/components/ProfileDrawer.tsx`
+Total Lines: 524
+Total Bytes: 22440
+Showing lines 440 to 470
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+440:                   required
+441:                 />
+442:               </div>
+443:             </div>
+444: 
+445:             <div>
+446:               <label className="block text-xs font-bold text-stone-500 uppercase font-mono tracking-wider">
+447:                 Shipping Address
+448:               </label>
+449:               <div className="relative mt-1">
+450:                 <span className="absolute top-3 left-3 text-stone-400">
+451:                   <MapPin className="h-4 w-4" />
+452:                 </span>
+453:                 <textarea
+454:                   value={profile.shipping_address || ''}
+455:                   onChange={(e) => setProfile({ ...profile, shipping_address: e.target.value })}
+456:                   className="w-full rounded-lg border border-stone-300 bg-white pl-9 pr-3 py-2.5 text-xs focus:border-stone-500 focus:outline-hidden h-20 resize-none font-sans"
+457:                   placeholder="Enter your complete delivery address"
+458:                 />
+459:               </div>
+460:             </div>
+461: 
+462:             <div>
+463:               <label className="block text-xs font-bold text-stone-500 uppercase font-mono tracking-wider">
+464:                 Preferred Valuation Currency
+465:               </label>
+466:               <div className="relative mt-1">
+467:                 <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400">
+468:                   <Globe className="h-4 w-4" />
+469:                 </span>
+470:                 <select
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+
+Created At: 2026-07-10T10:57:21Z
+Completed At: 2026-07-10T10:57:21Z
+File Path: `file:///c:/Users/Sanjeeva%20Reddy/Downloads/Sree-Venkateswara-Jewellers-main/frontend/src/components/ProfileDrawer.tsx`
+Total Lines: 524
+Total Bytes: 22440
+Showing lines 350 to 400
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+350:                       </span>
+351:                       <textarea
+352:                         value={regAddress}
+353:                         onChange={(e) => setRegAddress(e.target.value)}
+354:                         className="w-full rounded-xl border border-stone-200 bg-stone-50 pl-9 pr-3 py-2 text-xs focus:border-stone-500 focus:outline-hidden text-stone-850 h-14 resize-none font-sans"
+355:                         placeholder="Enter delivery pooja / ornaments address"
+356:                       />
+357:                     </div>
+358:                   </div>
+359:                 </>
+360:               )}
+361:             </div>
+362: 
+363:             <button
+364:               type="submit"
+365:               disabled={isLoggingIn}
+366:               className="w-full bg-stone-900 hover:bg-[#936C31] text-white py-3 text-xs font-bold uppercase tracking-widest transition-all rounded-xl cursor-pointer flex items-center justify-center gap-2 shadow-xs"
+367:               style={{ backgroundColor: primaryColor }}
+368:             >
+369:               <span>{loginTab === 'signin' ? 'Verify and Authenticate' : 'Register and Login'}</span>
+370:               <ArrowRight className="h-4 w-4" />
+371:             </button>
+372:           </form>
+373:         </div>
+374:       ) : (
+375:         /* LOGGED IN PROFILE FORM VIEW */
+376:         <form onSubmit={handleSave} className="flex-1 p-6 space-y-6 overflow-y-auto">
+377:           {saveSuccess && (
+378:             <div className="rounded-xl bg-emerald-500/10 p-4 text-xs text-emerald-800 border border-emerald-500/20 flex items-center gap-2 font-mono font-bold">
+379:               <CheckCircle className="h-4 w-4 shrink-0" />
+380:               <span>Profile successfully written and updated on Supabase servers!</span>
+381:             </div>
+382:           )}
+383: 
+384:           <div className="space-y-4">
+385:             <div>
+386:               <label className="block text-xs font-bold text-stone-500 uppercase font-mono tracking-wider">
+387:                 Username
+388:               </label>
+389:               <div className="relative mt-1">
+390:                 <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400">
+391:                   <User className="h-4 w-4" />
+392:                 </span>
+393:                 <input
+394:                   type="text"
+395:                   value={profile.username}
+396:                   onChange={(e) => setProfile({ ...profile, username: e.target.value })}
+397:                   className="w-full rounded-lg border border-stone-300 bg-white pl-9 pr-3 py-2.5 text-xs font-serif font-bold focus:border-stone-500 focus:outline-hidden"
+398:                   placeholder="Enter display name"
+399:                   required
+400:                 />
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+
+Created At: 2026-07-10T11:00:01Z
+Completed At: 2026-07-10T11:00:01Z
+File Path: `file:///c:/Users/Sanjeeva%20Reddy/Downloads/Sree-Venkateswara-Jewellers-main/frontend/src/components/ProfileDrawer.tsx`
+Total Lines: 524
+Total Bytes: 22440
+Showing lines 100 to 140
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+100:     const emailLower = loginEmail.trim().toLowerCase();
+101:     if (!emailLower.includes('@')) {
+102:       setLoginError('Please enter a valid email address.');
+103:       setIsLoggingIn(false);
+104:       return;
+105:     }
+106: 
+107:     try {
+108:       const allProfiles = await getProfiles();
+109:       const passwords = getPasswordsMap();
+110: 
+111:       if (loginTab === 'signin') {
+112:         const found = allProfiles.find(p => p.email.toLowerCase() === emailLower);
+113:         if (!found) {
+114:           setLoginError('This email is not registered yet. Switch to "Create Account" tab.');
+115:           setIsLoggingIn(false);
+116:           return;
+117:         }
+118:         const registeredHash = passwords[emailLower] || '8159cfaa';
+119:         if (registeredHash !== djb2Hash(loginPassword)) {
+120:           setLoginError('Incorrect password. Please verify and try again.');
+121:           setIsLoggingIn(false);
+122:           return;
+123:         }
+124:         onLogin(found);
+125:       } else {
+126:         const found = allProfiles.find(p => p.email.toLowerCase() === emailLower);
+127:         if (found) {
+128:           setLoginError('Email already registered. Sign in instead.');
+129:           setIsLoggingIn(false);
+130:           return;
+131:         }
+132:         if (!regName.trim()) {
+133:           setLoginError('Please provide your name.');
+134:           setIsLoggingIn(false);
+135:           return;
+136:         }
+137: 
+138:         const newProfile: Profile = {
+139:           id: 'p-' + Date.now(),
+140:           username: regName.trim(),
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+
+Created At: 2026-07-10T11:00:29Z
+Completed At: 2026-07-10T11:00:29Z
+File Path: `file:///c:/Users/Sanjeeva%20Reddy/Downloads/Sree-Venkateswara-Jewellers-main/frontend/src/components/ProfileDrawer.tsx`
+Total Lines: 524
+Total Bytes: 22440
+Showing lines 150 to 180
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+150: 
+151:       setLoginEmail('');
+152:       setLoginPassword('');
+153:       setRegName('');
+154:       setRegPhone('');
+155:       setRegAddress('');
+156:       if (onProfileUpdated) {
+157:         onProfileUpdated();
+158:       }
+159:     } catch (err) {
+160:       console.error(err);
+161:       setLoginError('Connection failure. Please try again.');
+162:     } finally {
+163:       setIsLoggingIn(false);
+164:     }
+165:   };
+166: 
+167:   const handleSave = async (e: React.FormEvent) => {
+168:     e.preventDefault();
+169:     if (!activeProfile) return;
+170:     
+171:     setIsSaving(true);
+172:     try {
+173:       await updateProfile(profile);
+174:       setSaveSuccess(true);
+175:       if (onProfileUpdated) {
+176:         onProfileUpdated(profile);
+177:       }
+178:       setTimeout(() => setSaveSuccess(false), 3000);
+179:     } catch (err) {
+180:       alert('Error saving profile changes.');
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+
+Created At: 2026-07-10T11:10:37Z
+Completed At: 2026-07-10T11:10:37Z
+File Path: `file:///c:/Users/Sanjeeva%20Reddy/Downloads/Sree-Venkateswara-Jewellers-main/frontend/src/components/ProfileDrawer.tsx`
+Total Lines: 524
+Total Bytes: 22440
+Showing lines 300 to 360
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+300:                     className="w-full rounded-xl border border-stone-200 bg-stone-50 pl-9 pr-3 py-2 text-xs font-mono focus:border-stone-500 focus:outline-hidden text-stone-850"
+301:                     placeholder="e.g. customer@gmail.com"
+302:                   />
+303:                 </div>
+304:               </div>
+305: 
+306:               {/* Password */}
+307:               <div>
+308:                 <label className="block text-[10px] font-bold text-stone-450 uppercase font-mono tracking-wider">Password</label>
+309:                 <div className="relative mt-1">
+310:                   <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400">
+311:                     <Lock className="h-4 w-4" />
+312:                   </span>
+313:                   <input
+314:                     type="password"
+315:                     required
+316:                     value={loginPassword}
+317:                     onChange={(e) => setLoginPassword(e.target.value)}
+318:                     autoComplete="new-password"
+319:                     className="w-full rounded-xl border border-stone-200 bg-stone-50 pl-9 pr-3 py-2 text-xs font-mono focus:border-stone-500 focus:outline-hidden text-stone-850"
+320:                     placeholder="â€¢â€¢â€¢â€¢â€¢â€¢â€¢â€¢"
+321:                   />
+322:                 </div>
+323:               </div>
+324: 
+325:               {/* Phone & Address (Registration Only) */}
+326:               {loginTab === 'signup' && (
+327:                 <
+<truncated 192 bytes>
+          <div className="relative mt-1">
+331:                       <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400">
+332:                         <Phone className="h-4 w-4" />
+333:                       </span>
+334:                       <input
+335:                         type="text"
+336:                         required
+337:                         value={regPhone}
+338:                         onChange={(e) => setRegPhone(e.target.value)}
+339:                         className="w-full rounded-xl border border-stone-200 bg-stone-50 pl-9 pr-3 py-2 text-xs font-mono focus:border-stone-500 focus:outline-hidden text-stone-850"
+340:                         placeholder="e.g. +91 99008 87766"
+341:                       />
+342:                     </div>
+343:                   </div>
+344: 
+345:                   <div>
+346:                     <label className="block text-[10px] font-bold text-stone-450 uppercase font-mono tracking-wider">Shipping Address</label>
+347:                     <div className="relative mt-1">
+348:                       <span className="absolute top-2.5 left-3 text-stone-400">
+349:                         <MapPin className="h-4 w-4" />
+350:                       </span>
+351:                       <textarea
+352:                         value={regAddress}
+353:                         onChange={(e) => setRegAddress(e.target.value)}
+354:                         className="w-full rounded-xl border border-stone-200 bg-stone-50 pl-9 pr-3 py-2 text-xs focus:border-stone-500 focus:outline-hidden text-stone-850 h-14 resize-none font-sans"
+355:                         placeholder="Enter delivery pooja / ornaments address"
+356:                       />
+357:                     </div>
+358:                   </div>
+359:                 </>
+360:               )}
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+
+Created At: 2026-07-10T11:10:43Z
+Completed At: 2026-07-10T11:10:44Z
+File Path: `file:///c:/Users/Sanjeeva%20Reddy/Downloads/Sree-Venkateswara-Jewellers-main/frontend/src/components/ProfileDrawer.tsx`
+Total Lines: 524
+Total Bytes: 22440
+Showing lines 400 to 440
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+400:                 />
+401:               </div>
+402:             </div>
+403: 
+404:             <div>
+405:               <label className="block text-xs font-bold text-stone-500 uppercase font-mono tracking-wider">
+406:                 Email Address
+407:               </label>
+408:               <div className="relative mt-1">
+409:                 <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400">
+410:                   <Mail className="h-4 w-4" />
+411:                 </span>
+412:                 <input
+413:                   type="email"
+414:                   value={profile.email}
+415:                   disabled
+416:                   className="w-full rounded-lg border border-stone-200 bg-stone-50 pl-9 pr-3 py-2.5 text-xs font-mono text-stone-500 cursor-not-allowed focus:outline-hidden"
+417:                   placeholder="Verify registered email"
+418:                   required
+419:                 />
+420:               </div>
+421:               <p className="text-[10px] text-stone-400 font-mono tracking-wide mt-1.5 uppercase">
+422:                 Registered Customer Email
+423:               </p>
+424:             </div>
+425: 
+426:             <div>
+427:               <label className="block text-xs font-bold text-stone-500 uppercase font-mono tracking-wider">
+428:                 Phone Number (for WhatsApp enquiries)
+429:               </label>
+430:               <div className="relative mt-1">
+431:                 <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400">
+432:                   <Phone className="h-4 w-4" />
+433:                 </span>
+434:                 <input
+435:                   type="text"
+436:                   value={profile.phone_number}
+437:                   onChange={(e) => setProfile({ ...profile, phone_number: e.target.value })}
+438:                   className="w-full rounded-lg border border-stone-300 bg-white pl-9 pr-3 py-2.5 text-xs focus:border-stone-500 focus:outline-hidden"
+439:                   placeholder="+91 99008 87766"
+440:                   required
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+
+Created At: 2026-07-10T11:12:28Z
+Completed At: 2026-07-10T11:12:28Z
+File Path: `file:///c:/Users/Sanjeeva%20Reddy/Downloads/Sree-Venkateswara-Jewellers-main/frontend/src/components/ProfileDrawer.tsx`
+Total Lines: 524
+Total Bytes: 22440
+Showing lines 30 to 60
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+30: }) => {
+31:   // Form Draft Profile State
+32:   const [profile, setProfile] = useState<Profile>({
+33:     id: '',
+34:     username: '',
+35:     email: '',
+36:     phone_number: '',
+37:     shipping_address: ''
+38:   });
+39:   
+40:   const [isSaving, setIsSaving] = useState(false);
+41:   const [saveSuccess, setSaveSuccess] = useState(false);
+42: 
+43:   // Standard Login / Signup Form States
+44:   const [loginEmail, setLoginEmail] = useState('');
+45:   const [loginPassword, setLoginPassword] = useState('');
+46:   const [loginTab, setLoginTab] = useState<'signin' | 'signup'>('signin');
+47:   const [regName, setRegName] = useState('');
+48:   const [regPhone, setRegPhone] = useState('');
+49:   const [regAddress, setRegAddress] = useState('');
+50:   const [isLoggingIn, setIsLoggingIn] = useState(false);
+51:   const [loginError, setLoginError] = useState<string | null>(null);
+52: 
+53:   // Auto-sync form state to activeProfile prop
+54:   useEffect(() => {
+55:     if (activeProfile) {
+56:       setProfile(activeProfile);
+57:     }
+58:   }, [activeProfile]);
+59: 
+60:   // Helper: Retrieve passwords map
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+
+Created At: 2026-07-10T11:13:08Z
+Completed At: 2026-07-10T11:13:09Z
+File Path: `file:///c:/Users/Sanjeeva%20Reddy/Downloads/Sree-Venkateswara-Jewellers-main/frontend/src/components/ProfileDrawer.tsx`
+Total Lines: 104
+Total Bytes: 4681
+Showing lines 30 to 50
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+30:                 <span className="absolute top-3 left-3 text-stone-400">
+31:                   <MapPin className="h-4 w-4" />
+32:                 </span>
+33:                 <textarea
+34:                   value={profile.shipping_address || ''}
+35:                   onChange={(e) => setProfile({ ...profile, shipping_address: e.target.value })}
+36:                   className="w-full rounded-lg border border-stone-300 bg-white pl-9 pr-3 py-2.5 text-xs focus:border-stone-500 focus:outline-hidden h-20 resize-none font-sans"
+37:                   placeholder="Enter your complete delivery address"
+38:                 />
+39:               </div>
+40:             </div>
+41: 
+42:             <div>
+43:               <label className="block text-xs font-bold text-stone-500 uppercase font-mono tracking-wider">
+44:                 Preferred Valuation Currency
+45:               </label>
+46:               <div className="relative mt-1">
+47:                 <span className="absolute inset-y-0 left-0 flex items-center pl-3 text-stone-400">
+48:                   <Globe className="h-4 w-4" />
+49:                 </span>
+50:                 <select
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+
+Created At: 2026-07-10T11:15:17Z
+Completed At: 2026-07-10T11:15:30Z
+File Path: `file:///C:/Users/Sanjeeva%20Reddy/Downloads/temp_extract/Sree-Venkateswara-Jewellers-main/src/components/ProfileDrawer.tsx`
+Total Lines: 684
+Total Bytes: 30261
+Showing lines 30 to 60
+The following code has been modified to include a line number before every line, in the format: <line_number>: <original_line>. Please note that any changes targeting the original code should remove the line number, colon, and leading space.
+30:   onOpenAdmin,
+31:   onProfileUpdated,
+32:   products,
+33:   wishlist,
+34:   onToggleFavorite,
+35:   onSelectProduct,
+36:   selectedCurrency,
+37:   onCurrencyChange
+38: }) => {
+39:   // Form Draft Profile State
+40:   const [profile, setProfile] = useState<Profile>({
+41:     id: '',
+42:     username: '',
+43:     email: '',
+44:     phone_number: '',
+45:     shipping_address: ''
+46:   });
+47:   
+48:   const [isSaving, setIsSaving] = useState(false);
+49:   const [saveSuccess, setSaveSuccess] = useState(false);
+50:   const [activeTab, setActiveTab] = useState<'profile' | 'wishlist'>('profile');
+51: 
+52:   // Standard Login / Signup Form States
+53:   const [loginEmail, setLoginEmail] = useState('');
+54:   const [loginPassword, setLoginPassword] = useState('');
+55:   const [loginTab, setLoginTab] = useState<'signin' | 'signup'>('signin');
+56:   const [regName, setRegName] = useState('');
+57:   const [regPhone, setRegPhone] = useState('');
+58:   const [regAddress, setRegAddress] = useState('');
+59:   const [isLoggingIn, setIsLoggingIn] = useState(false);
+60:   const [loginError, setLoginError] = useState<string | null>(null);
+The above content does NOT show the entire file contents. If you need to view any lines of the file which were not shown to complete your task, call this tool again to view those lines.
+

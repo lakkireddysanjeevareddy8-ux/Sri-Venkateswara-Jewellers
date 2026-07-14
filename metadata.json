@@ -1,0 +1,6 @@
+{
+  "name": "Sri Venkateswara Jewellers",
+  "description": "An editorial luxury jewelry catalog featuring real-time Supabase-synchronized pricing, daily metal rate overrides, WhatsApp broadcast routing, and a unified client profile administrative desk.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
