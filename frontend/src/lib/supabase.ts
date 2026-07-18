@@ -822,13 +822,29 @@ export const updateProfile = async (profile: Profile): Promise<Profile> => {
 
 // --- Store Settings ---
 export const getStoreSettings = async (): Promise<StoreSettings> => {
+  const safeMerge = (data: any) => ({
+    ...DEFAULT_SETTINGS,
+    ...data,
+    dynamic_theme: { ...DEFAULT_SETTINGS.dynamic_theme, ...(data?.dynamic_theme || {}) }
+  });
+
   if (isRealSupabaseConnected && supabase) {
     const { data, error } = await supabase.from('store_settings').select('*').maybeSingle();
-    if (!error && data) return { ...DEFAULT_SETTINGS, ...data };
+    if (!error && data) return safeMerge(data);
   }
-  if (memoryCache['svj_settings']) return { ...DEFAULT_SETTINGS, ...memoryCache['svj_settings'] };
+  
+  if (memoryCache['svj_settings']) return safeMerge(memoryCache['svj_settings']);
+  
   const local = localStorage.getItem('svj_settings');
-  return local ? { ...DEFAULT_SETTINGS, ...JSON.parse(local) } : DEFAULT_SETTINGS;
+  if (local) {
+    try {
+      return safeMerge(JSON.parse(local));
+    } catch (e) {
+      return DEFAULT_SETTINGS;
+    }
+  }
+  
+  return DEFAULT_SETTINGS;
 };
 
 export const updateStoreSettings = async (settings: StoreSettings): Promise<StoreSettings> => {
