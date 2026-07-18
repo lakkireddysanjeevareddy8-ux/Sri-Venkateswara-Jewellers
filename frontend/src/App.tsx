@@ -579,13 +579,13 @@ export default function App() {
   };
 
   // Bind DB active variables
-  const primaryColor = settings.dynamic_theme.primary;
-  const secondaryColor = settings.dynamic_theme.secondary;
-  const headerBg = settings.dynamic_theme.headerBg;
-  const headerText = settings.dynamic_theme.headerText;
-  const bg = settings.dynamic_theme.bg;
-  const text = settings.dynamic_theme.text;
-  const accent = settings.dynamic_theme.accent;
+  const primaryColor = settings.dynamic_theme?.primary || '#936C31';
+  const secondaryColor = settings.dynamic_theme?.secondary || '#1A1A1A';
+  const headerBg = settings.dynamic_theme?.headerBg || '#1A1A1A';
+  const headerText = settings.dynamic_theme?.headerText || '#FCFAF7';
+  const bg = settings.dynamic_theme?.bg || '#FCFAF7';
+  const text = settings.dynamic_theme?.text || '#1A1A1A';
+  const accent = settings.dynamic_theme?.accent || '#D4AF37';
 
   // Custom CSS properties for visual themer mapping
   const activeCustomStyles = {
