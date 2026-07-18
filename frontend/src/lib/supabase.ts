@@ -875,23 +875,31 @@ export const updateStoreSettings = async (settings: StoreSettings): Promise<Stor
 
 // --- Products ---
 export const getProducts = async (): Promise<Product[]> => {
-  let list: any[] = [];
-  if (isRealSupabaseConnected && supabase) {
-    const { data, error } = await supabase.from('products').select('*').order('id');
-    if (!error && data) {
-      list = data;
-    }
-  } else {
-    list = JSON.parse(localStorage.getItem('svj_products') || '[]');
-  }
-  
-  // Sort by ID to keep the positions strictly fixed on updates
-  list.sort((a, b) => a.id.localeCompare(b.id, undefined, { numeric: true, sensitivity: 'base' }));
+  let list: any[] = [];
+  if (isRealSupabaseConnected && supabase) {
+    const { data, error } = await supabase.from('products').select('*').order('id');
+    if (!error && data) {
+      list = data;
+    }
+  } else {
+    try {
+      list = JSON.parse(localStorage.getItem('svj_products') || '[]') || [];
+    } catch (e) {
+      list = [];
+    }
+  }
+  
+  if (!Array.isArray(list)) list = [];
+  
+  // Sort by ID to keep the positions strictly fixed on updates
+  list.sort((a, b) => (a?.id || '').localeCompare(b?.id || '', undefined, { numeric: true, sensitivity: 'base' }));
 
-  return list.map((p: any) => ({
-    ...p,
-    stock_quantity: typeof p.stock_quantity === 'number' ? p.stock_quantity : (p.is_in_stock ? 5 : 0)
-  }));
+  return list.map((p: any) => ({
+    ...p,
+    stock_quantity: typeof p.stock_quantity === 'number' ? p.stock_quantity : (p.is_in_stock ? 5 : 0),
+    weight_grams: typeof p.weight_grams === 'number' ? p.weight_grams : 0,
+    metal_weight_grams: typeof p.metal_weight_grams === 'number' ? p.metal_weight_grams : (typeof p.weight_grams === 'number' ? p.weight_grams : 0)
+  }));
 };
 
 export const createProduct = async (product: Omit<Product, 'id'>): Promise<Product> => {
