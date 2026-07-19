@@ -29,6 +29,52 @@ import {
   MessageSquare, Star, Sparkles, Filter, X, Info, Settings, MapPin, Heart, Phone
 } from 'lucide-react';
 
+// ---------------------------------------------------------------------------
+// Small error boundary so a single malformed product / render error takes
+// down only the catalog section, not the entire app (blank-screen prevention).
+// ---------------------------------------------------------------------------
+class CatalogErrorBoundary extends React.Component<
+  { children: React.ReactNode },
+  { hasError: boolean }
+> {
+  constructor(props: { children: React.ReactNode }) {
+    super(props);
+    this.state = { hasError: false };
+  }
+
+  static getDerivedStateFromError() {
+    return { hasError: true };
+  }
+
+  componentDidCatch(error: unknown, info: unknown) {
+    console.error('Catalog render error caught by boundary:', error, info);
+  }
+
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div className="text-center py-20 bg-white border border-[#E5E1DA] rounded-none mt-8 px-4">
+          <p className="text-stone-500 font-serif text-sm italic">
+            Something went wrong displaying part of the collection. Please refresh the page.
+          </p>
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
+// Safe numeric formatter — never throws on null/undefined/NaN.
+const safeNumber = (value: unknown, fallback = 0): number => {
+  const n = typeof value === 'number' ? value : Number(value);
+  return Number.isFinite(n) ? n : fallback;
+};
+
+const safeLocaleString = (value: unknown, fallback = '0'): string => {
+  const n = typeof value === 'number' ? value : Number(value);
+  return Number.isFinite(n) ? n.toLocaleString('en-IN') : fallback;
+};
+
 export default function App() {
   // DB & Session States
   const [settings, setSettings] = useState<StoreSettings | null>(null);
@@ -69,7 +115,7 @@ export default function App() {
   const [productHistory, setProductHistory] = useState<Product[]>([]);
 
   // Helper: generate a URL-safe slug from a product name
-  const toSlug = (name: string) => name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+  const toSlug = (name: string) => (name || '').toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
 
   const handleOpenProduct = (p: Product) => {
     setProductHistory([]);
@@ -512,15 +558,19 @@ export default function App() {
   // Filter results
   const filteredProducts = React.useMemo(() => {
     return products.filter((prod) => {
+      // Guard against malformed/incomplete product rows so one bad record
+      // can't crash the whole filter (and therefore the whole page).
+      if (!prod) return false;
+
       // 1. Search Query
       const query = searchQuery.toLowerCase().trim();
       const matchesSearch = 
         !query || 
-        prod.name.toLowerCase().includes(query) ||
-        prod.SKU.toLowerCase().includes(query) ||
-        prod.purity_type.toLowerCase().includes(query) ||
-        prod.product_type.toLowerCase().includes(query) ||
-        prod.main_category.toLowerCase().includes(query);
+        (prod.name || '').toLowerCase().includes(query) ||
+        (prod.SKU || '').toLowerCase().includes(query) ||
+        (prod.purity_type || '').toLowerCase().includes(query) ||
+        (prod.product_type || '').toLowerCase().includes(query) ||
+        (prod.main_category || '').toLowerCase().includes(query);
 
       // 2. Main Category
       const matchesMainCat = selectedMainCat === 'All' || prod.main_category === selectedMainCat;
@@ -572,6 +622,7 @@ export default function App() {
   }
 
   const truncateUsername = (username: string) => {
+    if (!username) return '';
     if (username.length > 13) {
       return username.substring(0, 13) + '...';
     }
@@ -620,7 +671,7 @@ export default function App() {
   };
 
   const formatSubheading = (prefix: string, typeName: string) => {
-    const cleanType = typeName.trim();
+    const cleanType = (typeName || '').trim();
     if (cleanType.toLowerCase().startsWith('gold') || cleanType.toLowerCase().startsWith('silver')) {
       return cleanType;
     }
@@ -824,25 +875,25 @@ export default function App() {
         <span className="text-stone-700 shrink-0">|</span>
         <div className="flex items-center gap-1 shrink-0">
           <span className="text-stone-400 font-sans font-bold">22K Gold:</span>
-          <strong className="text-[#D4AF37] font-sans">₹{settings.gold_22k_rate.toLocaleString('en-IN')}</strong>
+          <strong className="text-[#D4AF37] font-sans">₹{safeLocaleString(settings.gold_22k_rate)}</strong>
           <span className="text-stone-500 font-sans">/g</span>
         </div>
         <span className="text-stone-700 shrink-0">|</span>
         <div className="flex items-center gap-1 shrink-0">
           <span className="text-stone-400 font-sans font-bold">24K Gold:</span>
-          <strong className="text-[#D4AF37] font-sans">₹{settings.gold_24k_rate.toLocaleString('en-IN')}</strong>
+          <strong className="text-[#D4AF37] font-sans">₹{safeLocaleString(settings.gold_24k_rate)}</strong>
           <span className="text-stone-500 font-sans">/g</span>
         </div>
         <span className="text-stone-700 shrink-0">|</span>
         <div className="flex items-center gap-1 shrink-0">
           <span className="text-stone-400 font-sans font-bold">Silver 92.5:</span>
-          <strong className="text-stone-200 font-sans">₹{settings.silver_999_rate.toLocaleString('en-IN')}</strong>
+          <strong className="text-stone-200 font-sans">₹{safeLocaleString(settings.silver_999_rate)}</strong>
           <span className="text-stone-500 font-sans">/g</span>
         </div>
         <span className="text-stone-700 shrink-0">|</span>
         <div className="flex items-center gap-1 shrink-0">
           <span className="text-stone-400 font-sans font-bold">Normal Silver:</span>
-          <strong className="text-stone-200 font-sans">₹{settings.silver_normal_rate.toLocaleString('en-IN')}</strong>
+          <strong className="text-stone-200 font-sans">₹{safeLocaleString(settings.silver_normal_rate)}</strong>
           <span className="text-stone-500 font-sans">/g</span>
         </div>
       </div>
@@ -993,10 +1044,10 @@ export default function App() {
           <div className="h-[1px] w-12 bg-[#D4AF37]/40" />
         </div>
         <h2 className="font-serif text-3xl sm:text-4.5xl font-medium text-[#1A1A1A] tracking-tight">
-          {settings.dynamic_theme.collection_title || 'Our Collection'}
+          {settings.dynamic_theme?.collection_title || 'Our Collection'}
         </h2>
         <p className="text-xs sm:text-sm text-stone-500 font-serif italic mt-2 max-w-xl mx-auto">
-          {settings.dynamic_theme.collection_subtitle || 'Curated masterpieces in gold and silver — every piece crafted with devotion and precision.'}
+          {settings.dynamic_theme?.collection_subtitle || 'Curated masterpieces in gold and silver — every piece crafted with devotion and precision.'}
         </p>
       </div>
 
@@ -1204,87 +1255,89 @@ export default function App() {
       <main className="mx-2 sm:mx-10 mt-10 flex-1">
         <div className="mt-2" />
 
-        {filteredProducts.length === 0 ? (
-          <div className="text-center py-20 bg-white border border-[#E5E1DA] rounded-none mt-8 px-4">
-            <p className="text-stone-400 font-serif text-base italic">
-              No articles matching your specific nested filter tree parameters were located inside the database.
-            </p>
-            <button
-              onClick={() => {
-                setSearchQuery('');
-                setSelectedMainCat('All');
-                setSelectedPurity('All');
-                setSelectedStyle('All');
-                setSelectedGender('All');
-              }}
-              className="mt-6 border border-[#1A1A1A] bg-[#1A1A1A] text-white hover:bg-[#936C31] hover:border-[#936C31] px-6 py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all rounded-none cursor-pointer"
-            >
-              Reset Filters
-            </button>
-          </div>
-        ) : (
-          (() => {
-            const goldProducts = filteredProducts.filter(p => p.main_category === 'Gold');
-            const silver925Products = filteredProducts.filter(p => p.main_category === 'Silver' && p.purity_type === 'Silver 92.5 Purity');
-            const silverProducts = filteredProducts.filter(p => p.main_category === 'Silver' && p.purity_type !== 'Silver 92.5 Purity');
+        <CatalogErrorBoundary>
+          {filteredProducts.length === 0 ? (
+            <div className="text-center py-20 bg-white border border-[#E5E1DA] rounded-none mt-8 px-4">
+              <p className="text-stone-400 font-serif text-base italic">
+                No articles matching your specific nested filter tree parameters were located inside the database.
+              </p>
+              <button
+                onClick={() => {
+                  setSearchQuery('');
+                  setSelectedMainCat('All');
+                  setSelectedPurity('All');
+                  setSelectedStyle('All');
+                  setSelectedGender('All');
+                }}
+                className="mt-6 border border-[#1A1A1A] bg-[#1A1A1A] text-white hover:bg-[#936C31] hover:border-[#936C31] px-6 py-2.5 text-[10px] font-bold uppercase tracking-widest transition-all rounded-none cursor-pointer"
+              >
+                Reset Filters
+              </button>
+            </div>
+          ) : (
+            (() => {
+              const goldProducts = filteredProducts.filter(p => p.main_category === 'Gold');
+              const silver925Products = filteredProducts.filter(p => p.main_category === 'Silver' && p.purity_type === 'Silver 92.5 Purity');
+              const silverProducts = filteredProducts.filter(p => p.main_category === 'Silver' && p.purity_type !== 'Silver 92.5 Purity');
 
-            return (
-              <div className="space-y-16 mt-6">
-                {renderMainSection(
-                  'Golden Jewellery',
-                  'Exquisite certified solid gold treasures and masterfully crafted ornaments',
-                  '22K / 24K Hallmark Standard',
-                  goldProducts,
-                  'gold',
-                  'Golden',
-                  {
-                    bg: 'bg-amber-50/50',
-                    text: 'text-[#936C31]',
-                    border: 'border-amber-200/60',
-                    accent: 'bg-[#936C31]'
-                  }
-                )}
+              return (
+                <div className="space-y-16 mt-6">
+                  {renderMainSection(
+                    'Golden Jewellery',
+                    'Exquisite certified solid gold treasures and masterfully crafted ornaments',
+                    '22K / 24K Hallmark Standard',
+                    goldProducts,
+                    'gold',
+                    'Golden',
+                    {
+                      bg: 'bg-amber-50/50',
+                      text: 'text-[#936C31]',
+                      border: 'border-amber-200/60',
+                      accent: 'bg-[#936C31]'
+                    }
+                  )}
 
-                {renderMainSection(
-                  'Silver 92.5 Purity Jewellery',
-                  'Premium quality sterling silver hallmarked collection with radiant finishing',
-                  '92.5% Fine Sterling',
-                  silver925Products,
-                  'silver925',
-                  'Silver',
-                  {
-                    bg: 'bg-stone-50/50',
-                    text: 'text-stone-800',
-                    border: 'border-stone-200/60',
-                    accent: 'bg-[#D4AF37]'
-                  }
-                )}
+                  {renderMainSection(
+                    'Silver 92.5 Purity Jewellery',
+                    'Premium quality sterling silver hallmarked collection with radiant finishing',
+                    '92.5% Fine Sterling',
+                    silver925Products,
+                    'silver925',
+                    'Silver',
+                    {
+                      bg: 'bg-stone-50/50',
+                      text: 'text-stone-800',
+                      border: 'border-stone-200/60',
+                      accent: 'bg-[#D4AF37]'
+                    }
+                  )}
 
-                {renderMainSection(
-                  'Silver Jewellery',
-                  'Traditional and modern fine silver accessories and curated standard articles',
-                  '99.9% / Curated Silver',
-                  silverProducts,
-                  'silver',
-                  'Silver',
-                  {
-                    bg: 'bg-stone-50/20',
-                    text: 'text-stone-700',
-                    border: 'border-stone-100',
-                    accent: 'bg-stone-400'
-                  }
-                )}
-              </div>
-            );
-          })()
-        )}
+                  {renderMainSection(
+                    'Silver Jewellery',
+                    'Traditional and modern fine silver accessories and curated standard articles',
+                    '99.9% / Curated Silver',
+                    silverProducts,
+                    'silver',
+                    'Silver',
+                    {
+                      bg: 'bg-stone-50/20',
+                      text: 'text-stone-700',
+                      border: 'border-stone-100',
+                      accent: 'bg-stone-400'
+                    }
+                  )}
+                </div>
+              );
+            })()
+          )}
+        </CatalogErrorBoundary>
       </main>
 
       {/* FOOTER */}
       <footer className="bg-[#F2EDE4] px-6 sm:px-10 py-6 mt-20 flex flex-col md:flex-row justify-between items-center border-t border-[#E5E1DA] text-[10px] uppercase tracking-[0.1em] gap-4">
         <div className="space-y-1">
           <p className="font-bold font-serif text-[#1A1A1A] tracking-wider">
-            {settings.dynamic_theme.footer_copyright || `© 2026 ${settings.shop_name}.`}
+            {settings.dynamic_theme?.footer_copyright || `© 2026 ${settings.shop_name}.`}
           </p>
           {settings.gstin && (
             <p className="text-[9px] text-[#1A1A1A]/70 font-mono tracking-normal mt-0.5 normal-case">GSTIN: {settings.gstin}</p>
@@ -1295,7 +1348,7 @@ export default function App() {
             </p>
           )}
           <p className="text-[9px] text-[#1A1A1A]/60 italic font-serif mt-0.5 lowercase">
-            {settings.dynamic_theme.footer_text || '100% certified 916 hallmark standard jewels. pre-booking registered online.'}
+            {settings.dynamic_theme?.footer_text || '100% certified 916 hallmark standard jewels. pre-booking registered online.'}
           </p>
         </div>
         <div className="flex flex-wrap gap-x-4 gap-y-1 font-mono text-[9px] text-stone-500">
