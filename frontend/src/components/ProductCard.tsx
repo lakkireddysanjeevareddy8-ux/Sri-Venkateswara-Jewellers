@@ -12,17 +12,24 @@ interface ProductCardProps {
   selectedCurrency?: CurrencyCode;
 }
 
+// Safe numeric coercion — never lets a null/undefined/NaN value escape into
+// arithmetic or .toFixed()/.toLocaleString() calls further down the tree.
+const num = (value: unknown, fallback = 0): number => {
+  const n = typeof value === 'number' ? value : Number(value);
+  return Number.isFinite(n) ? n : fallback;
+};
+
 export function getRateForPurity(purity: string, settings: StoreSettings): number {
   switch (purity) {
     case '22K Gold':
-      return settings.gold_22k_rate;
+      return num(settings.gold_22k_rate);
     case '24K Gold':
-      return settings.gold_24k_rate;
+      return num(settings.gold_24k_rate);
     case 'Silver 92.5 Purity':
     case 'Silver 999 Purity':
-      return settings.silver_999_rate;
+      return num(settings.silver_999_rate);
     case 'Normal Silver':
-      return settings.silver_normal_rate;
+      return num(settings.silver_normal_rate);
     default:
       return 0;
   }
@@ -31,14 +38,14 @@ export function getRateForPurity(purity: string, settings: StoreSettings): numbe
 export function getCanceledRateForPurity(purity: string, settings: StoreSettings): number {
   switch (purity) {
     case '22K Gold':
-      return settings.flat_offer_canceled_gold_22k ?? settings.gold_22k_rate;
+      return num(settings.flat_offer_canceled_gold_22k ?? settings.gold_22k_rate);
     case '24K Gold':
-      return settings.flat_offer_canceled_gold_24k ?? settings.gold_24k_rate;
+      return num(settings.flat_offer_canceled_gold_24k ?? settings.gold_24k_rate);
     case 'Silver 92.5 Purity':
     case 'Silver 999 Purity':
-      return settings.flat_offer_canceled_silver_999 ?? settings.silver_999_rate;
+      return num(settings.flat_offer_canceled_silver_999 ?? settings.silver_999_rate);
     case 'Normal Silver':
-      return settings.flat_offer_canceled_silver_normal ?? settings.silver_normal_rate;
+      return num(settings.flat_offer_canceled_silver_normal ?? settings.silver_normal_rate);
     default:
       return 0;
   }
@@ -47,21 +54,21 @@ export function getCanceledRateForPurity(purity: string, settings: StoreSettings
 export function getExclusiveOfferRateForPurity(purity: string, settings: StoreSettings): number {
   switch (purity) {
     case '22K Gold':
-      return settings.flat_offer_exclusive_gold_22k ?? settings.gold_22k_rate;
+      return num(settings.flat_offer_exclusive_gold_22k ?? settings.gold_22k_rate);
     case '24K Gold':
-      return settings.flat_offer_exclusive_gold_24k ?? settings.gold_24k_rate;
+      return num(settings.flat_offer_exclusive_gold_24k ?? settings.gold_24k_rate);
     case 'Silver 92.5 Purity':
     case 'Silver 999 Purity':
-      return settings.flat_offer_exclusive_silver_999 ?? settings.silver_999_rate;
+      return num(settings.flat_offer_exclusive_silver_999 ?? settings.silver_999_rate);
     case 'Normal Silver':
-      return settings.flat_offer_exclusive_silver_normal ?? settings.silver_normal_rate;
+      return num(settings.flat_offer_exclusive_silver_normal ?? settings.silver_normal_rate);
     default:
       return 0;
   }
 }
 
 export function calculateJewelryPrice(weight: number, rate: number, makingChargePercent: number): number {
-  return (weight * rate) * (1 + makingChargePercent / 100);
+  return (num(weight) * num(rate)) * (1 + num(makingChargePercent) / 100);
 }
 
 export const ProductCard: React.FC<ProductCardProps> = ({ 
@@ -75,39 +82,45 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const isFlatOffer = settings.flat_offer_active;
   const currentRate = getRateForPurity(product.purity_type, settings);
 
+  // Every numeric field pulled straight from the product row is coerced
+  // through num() so a null/undefined value in Supabase can never reach
+  // .toFixed(), .toLocaleString(), or arithmetic and crash the render.
+  const weightGrams = num(product.weight_grams);
+  const makingChargePercent = num(product.making_charge_percent);
+
   // Custom or fallback canceled rate entered by the admin
   const canceledRate = (product.offer_canceled_rate && product.offer_canceled_rate > 0)
-    ? product.offer_canceled_rate
+    ? num(product.offer_canceled_rate)
     : (getCanceledRateForPurity(product.purity_type, settings) || (currentRate * 1.25));
 
   // Dynamic Stone & Metal Breakdown Pricing Logic
   const metalWeight = (product.has_stone && product.metal_weight_grams !== undefined && product.metal_weight_grams > 0)
-    ? product.metal_weight_grams
-    : product.weight_grams;
+    ? num(product.metal_weight_grams)
+    : weightGrams;
 
   const stoneWeightGrams = (product.has_stone && product.stone_weight_grams !== undefined)
-    ? product.stone_weight_grams
+    ? num(product.stone_weight_grams)
     : 0;
 
   const stonePrice = (product.has_stone && product.stone_price !== undefined)
-    ? product.stone_price
+    ? num(product.stone_price)
     : 0;
 
   const onlyMetalPriceBase = metalWeight * currentRate;
-  const metalPriceWithMaking = onlyMetalPriceBase * (1 + product.making_charge_percent / 100);
+  const metalPriceWithMaking = onlyMetalPriceBase * (1 + makingChargePercent / 100);
 
   // Original/deal price (what the customer actually pays) is made according to metal type, daily rate per gram
   const finalPrice = product.has_stone
     ? (metalPriceWithMaking + stonePrice)
-    : calculateJewelryPrice(product.weight_grams, currentRate, product.making_charge_percent);
+    : calculateJewelryPrice(weightGrams, currentRate, makingChargePercent);
 
   const onlyMetalPriceCanceledBase = metalWeight * canceledRate;
-  const metalPriceCanceledWithMaking = onlyMetalPriceCanceledBase * (1 + product.making_charge_percent / 100);
+  const metalPriceCanceledWithMaking = onlyMetalPriceCanceledBase * (1 + makingChargePercent / 100);
 
   // Canceled/removed price (M.R.P.) is based on rate entered/customized by the admin
   const canceledPrice = product.has_stone
     ? (metalPriceCanceledWithMaking + stonePrice)
-    : calculateJewelryPrice(product.weight_grams, canceledRate, product.making_charge_percent);
+    : calculateJewelryPrice(weightGrams, canceledRate, makingChargePercent);
 
   // 1.5% CGST + 1.5% SGST (3% GST total) added to the total
   const gstBaseAmount = finalPrice;
@@ -126,8 +139,10 @@ export const ProductCard: React.FC<ProductCardProps> = ({
   const formattedCanceledPrice = convertAndFormatPrice(canceledPriceInclGst, selectedCurrency as CurrencyCode);
 
   const amazonSavingsValue = Math.max(0, canceledPriceInclGst - finalPriceInclGst);
-  const amazonSavingsPercent = Math.max(1, Math.round((amazonSavingsValue / canceledPriceInclGst) * 100));
-  const ratePerGram = finalPriceInclGst / product.weight_grams;
+  const amazonSavingsPercent = canceledPriceInclGst > 0
+    ? Math.max(1, Math.round((amazonSavingsValue / canceledPriceInclGst) * 100))
+    : 0;
+  const ratePerGram = weightGrams > 0 ? finalPriceInclGst / weightGrams : 0;
 
   return (
     <div
@@ -194,7 +209,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
 
         {/* Product Main Image */}
         <img
-          src={product.image_urls[0] || 'https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?q=80&w=400'}
+          src={product.image_urls?.[0] || 'https://images.unsplash.com/photo-1617038260897-41a1f14a8ca0?q=80&w=400'}
           alt={product.name}
           className="h-full w-full object-cover object-center transition-transform duration-700 ease-out group-hover:scale-102"
           referrerPolicy="no-referrer"
@@ -253,7 +268,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
             </div>
             
             <span className="text-[7.5px] sm:text-[9px] font-mono text-stone-500 font-bold bg-stone-100 px-1 sm:px-1.5 py-0.1 rounded-xs">
-              {product.weight_grams.toFixed(2)}g
+              {weightGrams.toFixed(2)}g
             </span>
           </div>
 
@@ -288,7 +303,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
                 <>
                   <div className="flex justify-between border-t border-stone-100/50 pt-0.5 mt-0.5">
                     <span>Metal Weight:</span>
-                    <span className="font-semibold text-stone-700">{(product.metal_weight_grams ?? product.weight_grams).toFixed(2)}g</span>
+                    <span className="font-semibold text-stone-700">{num(product.metal_weight_grams ?? weightGrams).toFixed(2)}g</span>
                   </div>
                   <div className="flex justify-between">
                     <span>Stone Weight:</span>
@@ -302,7 +317,7 @@ export const ProductCard: React.FC<ProductCardProps> = ({
               )}
               <div className="flex justify-between border-t border-stone-100/50 pt-0.5">
                 <span>Making Charge:</span>
-                <span className="font-semibold text-stone-700">+{product.making_charge_percent}%</span>
+                <span className="font-semibold text-stone-700">+{makingChargePercent}%</span>
               </div>
               <div className="flex justify-between border-t border-stone-100/50 pt-0.5">
                 <span>GST (3%):</span>
